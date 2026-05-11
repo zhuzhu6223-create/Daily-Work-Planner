@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>个人工作计划</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -26,7 +25,6 @@ body{font-family:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;b
 h1{font-size:20px;font-weight:600;margin-bottom:2px;}
 .ds{font-size:13px;color:var(--muted);margin-bottom:1rem;}
 
-/* Sync bar */
 .sync-bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);margin-bottom:1.2rem;flex-wrap:wrap;}
 .sync-status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;flex:1;min-width:0;}
 .sync-status span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -37,16 +35,13 @@ h1{font-size:20px;font-weight:600;margin-bottom:2px;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 .sync-actions{display:flex;gap:6px;flex-wrap:wrap;}
 
-/* Tabs */
 .tabs{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;background:var(--bg-s);border-radius:var(--rl);padding:3px;margin-bottom:1.2rem;}
-.tab{padding:7px 4px;border:none;background:transparent;border-radius:var(--r);font-size:12px;cursor:pointer;color:var(--muted);font-family:inherit;display:flex;align-items:center;justify-content:center;gap:3px;transition:all .15s;white-space:nowrap;line-height:1.2;}
+.tab{padding:7px 4px;border:none;background:transparent;border-radius:var(--r);font-size:12px;cursor:pointer;color:var(--muted);font-family:inherit;display:flex;align-items:center;justify-content:center;gap:3px;white-space:nowrap;line-height:1.2;}
 .tab .ti{font-size:14px;}
 .tab .tl{display:none;}
 .tab.active{background:var(--bg);color:var(--text);font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
-.tab:hover:not(.active){color:var(--text);}
 .panel{display:none;}.panel.active{display:block;}
 
-/* Stats */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem;}
 .stat{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:12px 8px;text-align:center;}
 .stat-num{font-size:20px;font-weight:600;line-height:1.2;}
@@ -54,24 +49,20 @@ h1{font-size:20px;font-weight:600;margin-bottom:2px;}
 .prog-bar{height:5px;background:var(--bg-s);border-radius:3px;overflow:hidden;margin-bottom:1.2rem;}
 .prog-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .4s;}
 
-/* Add form */
 .add-form{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:12px;margin-bottom:1.2rem;}
 .ar{display:flex;gap:6px;margin-bottom:6px;align-items:center;}
 .ar:last-child{margin-bottom:0;}
 .add-form input[type=text]{flex:1;padding:9px 10px;font-size:14px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg-s);color:var(--text);outline:none;min-width:0;}
-.add-form input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(29,158,117,0.1);}
+.add-form input[type=text]:focus{border-color:var(--accent);}
 .add-form select{padding:9px 6px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg-s);color:var(--text);outline:none;min-width:0;}
-.add-form select:focus{border-color:var(--accent);}
 .sel-pri{flex:0 0 72px;}
 .sel-cat{flex:1;min-width:0;}
 .date-row{display:flex;gap:6px;align-items:center;}
 .date-group{display:flex;align-items:center;gap:4px;flex:1;min-width:0;}
 .date-group label{font-size:12px;color:var(--hint);flex-shrink:0;}
 .date-group input[type=date]{flex:1;padding:8px 6px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg-s);color:var(--text);outline:none;min-width:0;color-scheme:light dark;}
-.date-group input[type=date]:focus{border-color:var(--accent);}
 
-/* Buttons */
-.btn{padding:8px 12px;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;transition:background .15s;-webkit-tap-highlight-color:transparent;}
+.btn{padding:8px 12px;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;-webkit-tap-highlight-color:transparent;}
 .btn:hover{background:var(--bg-s);}
 .btn:active{transform:scale(0.97);}
 .btn-p{background:var(--accent);border-color:var(--accent);color:#fff;}
@@ -79,12 +70,10 @@ h1{font-size:20px;font-weight:600;margin-bottom:2px;}
 .btn-add{width:100%;justify-content:center;margin-top:6px;padding:10px;}
 .btn-sm{padding:5px 10px;font-size:12px;}
 
-/* Section */
 .sec{font-size:11px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;margin-top:1.2rem;display:flex;align-items:center;gap:6px;}
 .sec:first-child{margin-top:0;}
 .sec-count{background:var(--bg-s);border-radius:20px;padding:1px 7px;font-size:11px;color:var(--muted);}
 
-/* Task */
 .tlist{display:flex;flex-direction:column;gap:5px;}
 .task{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r);}
 .task.done{opacity:.55;}
@@ -118,11 +107,9 @@ h1{font-size:20px;font-weight:600;margin-bottom:2px;}
 .dstr{font-size:11px;color:var(--hint);}
 .tacts{display:flex;align-items:center;gap:3px;flex-shrink:0;margin-top:1px;}
 .ibtn{background:none;border:none;cursor:pointer;color:var(--hint);font-size:18px;line-height:1;padding:3px;-webkit-tap-highlight-color:transparent;}
-.ibtn:hover{color:var(--text);}
 .empty{text-align:center;color:var(--hint);font-size:13px;padding:24px 0;}
 .promote-btn{padding:3px 8px;font-size:11px;}
 
-/* Stats panel */
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.2rem;}
 .stat-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:14px;}
 .stat-card h3{font-size:11px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;}
@@ -142,7 +129,6 @@ h1{font-size:20px;font-weight:600;margin-bottom:2px;}
 .wd-fill{width:100%;border-radius:3px;transition:height .4s;}
 .wd-num{font-size:10px;color:var(--muted);margin-top:2px;}
 
-/* Gantt */
 .gantt-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
 .gantt-header{display:flex;border-bottom:0.5px solid var(--border);margin-bottom:5px;padding-bottom:3px;}
 .gantt-task-col{width:120px;flex-shrink:0;font-size:10px;color:var(--hint);font-weight:600;text-transform:uppercase;}
@@ -157,55 +143,27 @@ h1{font-size:20px;font-weight:600;margin-bottom:2px;}
 .gantt-filters{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap;}
 .gantt-filters select{padding:7px 8px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg);color:var(--text);outline:none;flex:1;}
 
-/* History */
 .hday{margin-bottom:1rem;}
 .hhdr{display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--bg-s);border-radius:var(--r);margin-bottom:4px;font-size:13px;font-weight:500;}
 .hrate{margin-left:auto;font-size:11px;color:var(--muted);}
 
-/* Report */
 .rc{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap;}
 .rc select{padding:9px 8px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg);color:var(--text);outline:none;flex:1;}
 .rc input[type=text]{padding:9px 10px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg);color:var(--text);outline:none;flex:2;min-width:0;}
-.rbox{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:1rem;font-size:13px;line-height:1.9;min-height:180px;white-space:pre-wrap;word-break:break-word;}
+.rbox{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:1rem;font-size:13px;line-height:1.8;min-height:200px;white-space:pre-wrap;word-break:break-word;font-family:'PingFang SC','Microsoft YaHei',sans-serif;}
 .rbox.ph{color:var(--hint);}
 .rc-btns{display:flex;gap:6px;margin-bottom:1rem;}
+.tips{background:var(--bg-s);border:0.5px solid var(--border);border-radius:var(--r);padding:10px 12px;margin-bottom:1rem;font-size:12px;color:var(--muted);line-height:1.6;}
+.tips strong{color:var(--text);}
 
-/* Chat */
-.chat-wrap{margin-top:1rem;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);overflow:hidden;}
-.chat-title{font-size:12px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:.05em;padding:9px 12px;border-bottom:0.5px solid var(--border);background:var(--bg-s);}
-.chat-msgs{max-height:260px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px 12px;display:flex;flex-direction:column;gap:8px;min-height:40px;}
-.msg{display:flex;flex-direction:column;gap:3px;max-width:88%;}
-.msg-u{align-self:flex-end;align-items:flex-end;}
-.msg-a{align-self:flex-start;}
-.msg-bubble{padding:8px 10px;border-radius:10px;font-size:13px;line-height:1.6;white-space:pre-wrap;word-break:break-word;}
-.msg-u .msg-bubble{background:var(--accent);color:#fff;border-bottom-right-radius:3px;}
-.msg-a .msg-bubble{background:var(--bg-s);color:var(--text);border-bottom-left-radius:3px;}
-.msg-lbl{font-size:11px;color:var(--hint);padding:0 3px;}
-.apply-btn{font-size:12px;color:var(--accent);background:none;border:none;cursor:pointer;padding:2px 3px;text-decoration:underline;text-underline-offset:2px;}
-.chat-ir{display:flex;gap:6px;padding:8px 10px;border-top:0.5px solid var(--border);}
-.chat-ir textarea{flex:1;padding:8px 10px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg-s);color:var(--text);outline:none;resize:none;height:38px;max-height:100px;line-height:1.5;}
-.chat-ir textarea:focus{border-color:var(--accent);}
-
-.spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-/* Desktop enhancements */
 @media(min-width:600px){
   .shell{padding:2rem 1.5rem 4rem;}
   h1{font-size:22px;}
   .tab .tl{display:inline;}
-  .tab .ti{font-size:15px;}
   .tab{font-size:13px;padding:8px 6px;}
-  .stats{gap:10px;}
   .stat-num{font-size:22px;}
   .stat{padding:14px 12px;}
-  .add-form{padding:14px 16px;}
-  .add-form input[type=text]{font-size:14px;}
-  .ar{gap:8px;}
-  .date-row{flex-wrap:nowrap;}
-  .sync-actions{flex-wrap:nowrap;}
   .gantt-task-col,.gantt-name{width:160px;}
-  .stat-grid{gap:16px;}
 }
 </style>
 </head>
@@ -236,7 +194,6 @@ h1{font-size:20px;font-weight:600;margin-bottom:2px;}
     <button class="tab" onclick="sw('report',this)"><span class="ti">📝</span><span class="tl"> 报告</span></button>
   </div>
 
-  <!-- 今日 -->
   <div id="tab-today" class="panel active">
     <div class="stats">
       <div class="stat"><div class="stat-num" id="s-total">0</div><div class="stat-label">今日任务</div></div>
@@ -247,7 +204,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:2px;}
     <div class="prog-bar"><div class="prog-fill" id="prog" style="width:0%"></div></div>
     <div class="add-form">
       <div class="ar">
-        <input type="text" id="t-text" placeholder="任务名称…">
+        <input type="text" id="t-text" placeholder="任务名称…" onkeydown="if(event.key==='Enter')addTask()">
         <select id="t-pri" class="sel-pri">
           <option value="urgent">紧急</option>
           <option value="mid" selected>一般</option>
@@ -276,11 +233,10 @@ h1{font-size:20px;font-weight:600;margin-bottom:2px;}
     <div class="tlist" id="today-list"></div>
   </div>
 
-  <!-- 待办池 -->
   <div id="tab-backlog" class="panel">
     <div class="add-form">
       <div class="ar">
-        <input type="text" id="bl-text" placeholder="待办项名称…">
+        <input type="text" id="bl-text" placeholder="待办项名称…" onkeydown="if(event.key==='Enter')addBL()">
         <select id="bl-pri" class="sel-pri">
           <option value="urgent">紧急</option>
           <option value="mid" selected>一般</option>
@@ -308,7 +264,6 @@ h1{font-size:20px;font-weight:600;margin-bottom:2px;}
     <div id="bl-sections"></div>
   </div>
 
-  <!-- 甘特图 -->
   <div id="tab-gantt" class="panel">
     <div class="gantt-filters">
       <select id="gantt-range" onchange="renderGantt()">
@@ -330,7 +285,6 @@ h1{font-size:20px;font-weight:600;margin-bottom:2px;}
     <div class="gantt-wrap"><div id="gantt-body"></div></div>
   </div>
 
-  <!-- 统计 -->
   <div id="tab-stats" class="panel">
     <div style="margin-bottom:1rem;">
       <select id="stat-range" onchange="renderStats()" style="padding:7px 8px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg);color:var(--text);outline:none;">
@@ -342,13 +296,58 @@ h1{font-size:20px;font-weight:600;margin-bottom:2px;}
     <div class="stat-grid" id="stat-grid"></div>
   </div>
 
-  <!-- 历史 -->
   <div id="tab-history" class="panel">
     <div id="hist-wrap"></div>
   </div>
 
-  <!-- 报告 -->
+  <!-- 编辑弹窗 -->
+  <div id="edit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:100;align-items:center;justify-content:center;padding:1rem;">
+    <div style="background:var(--bg);border-radius:var(--rl);padding:1.2rem;max-width:420px;width:100%;max-height:90vh;overflow-y:auto;">
+      <div style="font-size:15px;font-weight:600;margin-bottom:1rem;">编辑任务</div>
+      <div style="margin-bottom:10px;">
+        <label style="font-size:12px;color:var(--hint);display:block;margin-bottom:4px;">任务名称</label>
+        <input type="text" id="ed-text" style="width:100%;padding:9px 10px;font-size:14px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg-s);color:var(--text);outline:none;">
+      </div>
+      <div style="margin-bottom:10px;">
+        <label style="font-size:12px;color:var(--hint);display:block;margin-bottom:4px;">优先级</label>
+        <select id="ed-pri" style="width:100%;padding:9px 10px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg-s);color:var(--text);outline:none;">
+          <option value="urgent">紧急</option>
+          <option value="mid">一般</option>
+          <option value="low">低优</option>
+        </select>
+      </div>
+      <div style="margin-bottom:10px;">
+        <label style="font-size:12px;color:var(--hint);display:block;margin-bottom:4px;">类别</label>
+        <select id="ed-cat" style="width:100%;padding:9px 10px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg-s);color:var(--text);outline:none;">
+          <option value="">无类别</option>
+          <option value="政府市场">政府市场</option>
+          <option value="客户市场">客户市场</option>
+          <option value="品牌营销">品牌营销</option>
+          <option value="部门建设">部门建设</option>
+          <option value="内部事务">内部事务</option>
+          <option value="临时工作">临时工作</option>
+          <option value="其他工作">其他工作</option>
+        </select>
+      </div>
+      <div style="margin-bottom:10px;">
+        <label style="font-size:12px;color:var(--hint);display:block;margin-bottom:4px;">开始日期</label>
+        <input type="date" id="ed-start" style="width:100%;padding:9px 10px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg-s);color:var(--text);outline:none;color-scheme:light dark;">
+      </div>
+      <div style="margin-bottom:1rem;">
+        <label style="font-size:12px;color:var(--hint);display:block;margin-bottom:4px;">截止日期</label>
+        <input type="date" id="ed-due" style="width:100%;padding:9px 10px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg-s);color:var(--text);outline:none;color-scheme:light dark;">
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn" onclick="closeEdit()" style="flex:1;justify-content:center;">取消</button>
+        <button class="btn btn-p" onclick="saveEdit()" style="flex:1;justify-content:center;">保存</button>
+      </div>
+    </div>
+  </div>
+
   <div id="tab-report" class="panel">
+    <div class="tips">
+      <strong>💡 使用说明：</strong>选择时间范围后点"生成统计"，自动汇总任务清单。点"复制"后，可粘贴到豆包、DeepSeek、文心一言、Kimi 等任意 AI 助手，让它帮你生成完整报告。
+    </div>
     <div class="rc">
       <select id="rpt-type">
         <option value="day">日报</option>
@@ -357,21 +356,13 @@ h1{font-size:20px;font-weight:600;margin-bottom:2px;}
         <option value="quarter">季度总结</option>
         <option value="year">年度总结</option>
       </select>
-      <input type="text" id="rpt-extra" placeholder="补充说明（可选）">
+      <input type="text" id="rpt-extra" placeholder="补充说明（可选，会一起复制）">
     </div>
     <div class="rc-btns">
-      <button class="btn btn-p" onclick="genRpt()" id="gen-btn" style="flex:1;justify-content:center;">&#10022; AI 生成</button>
-      <button class="btn" onclick="copyRpt()" id="copy-btn" style="flex:1;justify-content:center;">&#128203; 复制</button>
+      <button class="btn btn-p" onclick="genRpt()" id="gen-btn" style="flex:1;justify-content:center;">📊 生成统计</button>
+      <button class="btn" onclick="copyRpt()" id="copy-btn" style="flex:1;justify-content:center;">📋 复制全文</button>
     </div>
-    <div class="rbox ph" id="rpt-out">点击"AI 生成"，自动汇总工作记录并生成报告草稿…</div>
-    <div class="chat-wrap" id="chat-wrap" style="display:none">
-      <div class="chat-title">&#128172; 修改建议</div>
-      <div class="chat-msgs" id="chat-msgs"></div>
-      <div class="chat-ir">
-        <textarea id="chat-input" placeholder="例如：语气更正式 / 展开第三部分…"></textarea>
-        <button class="btn btn-p" onclick="sendChat()" id="chat-btn" style="align-self:flex-end;">发送</button>
-      </div>
-    </div>
+    <div class="rbox ph" id="rpt-out">点击"生成统计"，将自动汇总该时间段的任务清单…</div>
   </div>
 </div>
 
@@ -395,7 +386,6 @@ function diffDays(a,b){return Math.round((new Date(b)-new Date(a))/86400000);}
 var tasks   = ls('wp6_tasks',[]);
 var backlog = ls('wp6_bl',[]);
 var streak  = ls('wp6_streak',{last:'',count:0});
-var chatHistory = [];
 var CATS       = ['政府市场','客户市场','品牌营销','部门建设','内部事务','临时工作','其他工作'];
 var CAT_COLORS = ['#1D9E75','#185FA5','#BA7517','#534AB7','#993C1D','#0F6E56','#6b6b66'];
 
@@ -449,13 +439,59 @@ function taskHtml(t,toggleFn,delFn,extra){
   extra=extra||'';
   return '<div class="task'+(t.done?' done':'')+'">'+
     '<input type="checkbox" class="tcb" '+(t.done?'checked':'')+' onchange="'+toggleFn+'('+t.id+')">'+
-    '<div class="tbody">'+
+    '<div class="tbody" style="cursor:pointer" onclick="openEdit('+t.id+')">'+
       '<div class="ttext">'+esc(t.text)+'</div>'+
       '<div class="tmeta">'+priTag(t.pri)+statusTag(t)+catTag(t.cat)+dateStr(t)+syncTag(t)+'</div>'+
     '</div>'+
     '<div class="tacts">'+extra+'<button class="ibtn" onclick="'+delFn+'('+t.id+')">&#215;</button></div>'+
   '</div>';
 }
+
+// Edit modal logic
+var editingId = null;
+function openEdit(id){
+  var t = tasks.find(function(x){return x.id===id;}) || backlog.find(function(x){return x.id===id;});
+  if(!t) return;
+  editingId = id;
+  document.getElementById('ed-text').value = t.text || '';
+  document.getElementById('ed-pri').value = t.pri || 'mid';
+  document.getElementById('ed-cat').value = t.cat || '';
+  document.getElementById('ed-start').value = t.startDate || '';
+  document.getElementById('ed-due').value = t.dueDate || '';
+  document.getElementById('edit-modal').style.display = 'flex';
+}
+function closeEdit(){
+  document.getElementById('edit-modal').style.display = 'none';
+  editingId = null;
+}
+function saveEdit(){
+  if(editingId === null) return;
+  var t = tasks.find(function(x){return x.id===editingId;});
+  var inBacklog = false;
+  if(!t){
+    t = backlog.find(function(x){return x.id===editingId;});
+    inBacklog = true;
+  }
+  if(!t) return;
+  t.text = document.getElementById('ed-text').value.trim() || t.text;
+  t.pri = document.getElementById('ed-pri').value;
+  t.cat = document.getElementById('ed-cat').value;
+  t.startDate = document.getElementById('ed-start').value;
+  t.dueDate = document.getElementById('ed-due').value;
+  if(inBacklog) saveBL(); else saveTasks();
+  pushOne(t);
+  closeEdit();
+  renderAll();
+}
+// Close modal when clicking outside
+document.addEventListener('DOMContentLoaded',function(){
+  var modal = document.getElementById('edit-modal');
+  if(modal){
+    modal.addEventListener('click',function(e){
+      if(e.target === modal) closeEdit();
+    });
+  }
+});
 
 function sw(name,btn){
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
@@ -465,7 +501,6 @@ function sw(name,btn){
   renderAll();
 }
 
-// ── Notion API ────────────────────────────────────────────────────────────────
 async function notionReq(method,path,body){
   var opts={method:method,headers:{'Content-Type':'application/json','X-Notion-Token':NOTION_TOKEN}};
   if(body)opts.body=JSON.stringify(body);
@@ -568,7 +603,6 @@ async function syncFromNotion(){
   document.getElementById('pull-btn').disabled=false;
 }
 
-// ── Export / Import ───────────────────────────────────────────────────────────
 function exportData(){
   var data={
     version:1,
@@ -597,7 +631,6 @@ function importData(event){
       var data=JSON.parse(e.target.result);
       if(!data.version||!data.tasks)throw new Error('格式错误');
       if(confirm('导入将合并现有数据，确认吗？')){
-        // Merge by id
         data.tasks.forEach(function(t){
           if(!tasks.find(function(x){return x.id===t.id||x.notionId===t.notionId;})){
             tasks.push(t);
@@ -620,7 +653,6 @@ function importData(event){
   event.target.value='';
 }
 
-// ── Add ───────────────────────────────────────────────────────────────────────
 function addTask(){
   var text=document.getElementById('t-text').value.trim();
   if(!text)return;
@@ -683,7 +715,6 @@ function checkStreak(){
   }
 }
 
-// ── Render ────────────────────────────────────────────────────────────────────
 function renderToday(){
   var shown=tasks.filter(function(t){return overlaps(t,TODAY);});
   var total=shown.length,done=shown.filter(function(t){return t.done;}).length;
@@ -728,7 +759,7 @@ function renderGantt(){
     return ts<=end&&te>=start;
   });
   var body=document.getElementById('gantt-body');
-  if(!all.length){body.innerHTML='<div class="gantt-empty">暂无有效时间段的任务<br><small>请为任务设置开始和截止日期</small></div>';return;}
+  if(!all.length){body.innerHTML='<div class="gantt-empty">暂无有效时间段的任务</div>';return;}
   var labelStep=Math.max(1,Math.floor(totalD/6));
   var dateLabels='';
   for(var i=0;i<totalD;i++){
@@ -751,7 +782,7 @@ function renderGantt(){
     var ci=CATS.indexOf(t.cat);
     var color=ci>=0?CAT_COLORS[ci]:'#888';
     rows+='<div class="gantt-row">'+
-      '<div class="gantt-name" title="'+esc(t.text)+'">'+(t.done?'✓ ':'')+esc(t.text)+'</div>'+
+      '<div class="gantt-name" title="'+esc(t.text)+'">'+(t.done?'&#10003; ':'')+esc(t.text)+'</div>'+
       '<div class="gantt-track">'+todayLine+'<div class="gantt-bar" style="left:'+left+'%;width:'+width+'%;background:'+color+';opacity:'+(t.done?0.4:1)+'">'+esc(t.text)+'</div></div>'+
     '</div>';
   });
@@ -775,19 +806,77 @@ function renderStats(){
     dayData.push({date:d,count:all.filter(function(t){return t.completedDate===d;}).length});
   }
   var maxDay=Math.max.apply(null,[1].concat(dayData.map(function(d){return d.count;})));
+
+  // 待办事项统计（仅未完成的待办池任务）
+  var blPending = backlog.filter(function(t){return !t.done;});
+  var blByDeadline = {week:0,month:0,quarter:0,later:0,overdue:0};
+  blPending.forEach(function(t){
+    if(isOverdue(t)){blByDeadline.overdue++;return;}
+    blByDeadline[blGroup(t)]++;
+  });
+  var blByCat = {};
+  blPending.forEach(function(t){
+    var c = t.cat || '未分类';
+    blByCat[c] = (blByCat[c]||0)+1;
+  });
+  var maxBlCat = Math.max.apply(null,[1].concat(Object.values(blByCat)));
+
+  // 今日数据
+  var todayShown = tasks.filter(function(t){return overlaps(t,TODAY);});
+  var todayDone = todayShown.filter(function(t){return t.done&&t.completedDate===TODAY;}).length;
+  var todayTotal = todayShown.length;
+  var todayRate = todayTotal ? Math.round(todayDone/todayTotal*100) : 0;
+  var todayOngoing = todayShown.filter(function(t){return !t.done&&isOngoing(t);}).length;
+
   var grid=document.getElementById('stat-grid');
-  var c1='<div class="stat-card"><h3>完成率</h3><div class="rate-circle"><div class="rate-num">'+rate+'%</div><div class="rate-sub">完成'+completed.length+'/共'+total+'项</div>'+(overdue?'<div style="margin-top:6px;font-size:12px;color:#A32D2D">⚠ '+overdue+'项逾期</div>':'')+'</div></div>';
+
+  // 今日卡片
+  var c_today = '<div class="stat-card full" style="background:linear-gradient(135deg,rgba(29,158,117,0.08),rgba(29,158,117,0.02));border-color:rgba(29,158,117,0.2)">'+
+    '<h3 style="color:var(--accent)">📅 今日 ('+TODAY+')</h3>'+
+    '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">'+
+      '<div style="text-align:center"><div style="font-size:24px;font-weight:600;color:var(--accent)">'+todayDone+'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">已完成</div></div>'+
+      '<div style="text-align:center"><div style="font-size:24px;font-weight:600">'+todayOngoing+'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">进行中</div></div>'+
+      '<div style="text-align:center"><div style="font-size:24px;font-weight:600">'+todayTotal+'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">总任务</div></div>'+
+      '<div style="text-align:center"><div style="font-size:24px;font-weight:600;color:var(--accent)">'+todayRate+'%</div><div style="font-size:11px;color:var(--muted);margin-top:2px">完成率</div></div>'+
+    '</div></div>';
+
+  var c1='<div class="stat-card"><h3>近'+days+'天完成率</h3><div class="rate-circle"><div class="rate-num">'+rate+'%</div><div class="rate-sub">完成'+completed.length+'/共'+total+'项</div>'+(overdue?'<div style="margin-top:6px;font-size:12px;color:#A32D2D">&#9888; '+overdue+'项逾期</div>':'')+'</div></div>';
   var c2='<div class="stat-card"><h3>近7天完成</h3><div class="week-row">'+dayData.map(function(d){
     var pp=Math.round(d.count/maxDay*100),pts=d.date.split('-');
     return '<div class="week-day"><div class="wd-label">'+pts[1]+'/'+pts[2]+'</div><div class="wd-bar"><div class="wd-fill" style="height:'+pp+'%;background:'+(d.date===TODAY?'#E24B4A':'var(--accent)')+'"></div></div><div class="wd-num">'+d.count+'</div></div>';
   }).join('')+'</div></div>';
-  var c3='<div class="stat-card full"><h3>按类别（近'+days+'天）</h3>'+
+
+  // 待办事项概览卡（按截止时间分布）
+  var blTotal = blPending.length;
+  var blItems = [
+    {label:'已逾期', count:blByDeadline.overdue, color:'#A32D2D'},
+    {label:'本周到期', count:blByDeadline.week, color:'#E24B4A'},
+    {label:'本月到期', count:blByDeadline.month, color:'#BA7517'},
+    {label:'本季到期', count:blByDeadline.quarter, color:'#185FA5'},
+    {label:'更远/无截止', count:blByDeadline.later, color:'#6b6b66'}
+  ];
+  var c_bl = '<div class="stat-card"><h3>待办池概览（'+blTotal+' 项未完成）</h3>'+
+    (blTotal===0 ? '<div class="empty" style="padding:10px 0">待办池为空</div>' :
+    blItems.filter(function(x){return x.count>0;}).map(function(x){
+      var pp = Math.round(x.count/blTotal*100);
+      return '<div class="bar-row"><div class="bar-label" style="color:'+x.color+'">'+x.label+'</div><div class="bar-wrap"><div class="bar-fill" style="width:'+pp+'%;background:'+x.color+'"></div></div><div class="bar-val">'+x.count+'</div></div>';
+    }).join(''))+'</div>';
+
+  // 待办按类别
+  var c_bl_cat = '<div class="stat-card"><h3>待办按类别</h3>'+
+    (Object.keys(blByCat).length===0 ? '<div class="empty" style="padding:10px 0">暂无待办</div>' :
+    Object.entries(blByCat).sort(function(a,b){return b[1]-a[1];}).map(function(e){
+      var ci=CATS.indexOf(e[0]),color=ci>=0?CAT_COLORS[ci]:'#888',pp=Math.round(e[1]/maxBlCat*100);
+      return '<div class="bar-row"><div class="bar-label">'+e[0]+'</div><div class="bar-wrap"><div class="bar-fill" style="width:'+pp+'%;background:'+color+'"></div></div><div class="bar-val">'+e[1]+'</div></div>';
+    }).join(''))+'</div>';
+
+  var c3='<div class="stat-card full"><h3>已完成任务按类别（近'+days+'天）</h3>'+
     (Object.keys(catCounts).length===0?'<div class="empty" style="padding:10px 0">暂无完成任务</div>':
     Object.entries(catCounts).sort(function(a,b){return b[1]-a[1];}).map(function(e){
       var ci=CATS.indexOf(e[0]),color=ci>=0?CAT_COLORS[ci]:'#888',pp=Math.round(e[1]/maxCat*100);
       return '<div class="bar-row"><div class="bar-label">'+e[0]+'</div><div class="bar-wrap"><div class="bar-fill" style="width:'+pp+'%;background:'+color+'"></div></div><div class="bar-val">'+e[1]+'</div></div>';
     }).join(''))+'</div>';
-  grid.innerHTML=c1+c2+c3;
+  grid.innerHTML=c_today+c1+c2+c_bl+c_bl_cat+c3;
 }
 
 function renderHistory(){
@@ -802,57 +891,102 @@ function renderHistory(){
   wrap.innerHTML=days.map(function(day){
     var done=day.tasks.filter(function(t){return t.completedDate===day.date;}).length;
     var going=day.tasks.filter(function(t){return !t.done;}).length;
-    return '<div class="hday"><div class="hhdr">📅 '+day.date+'<span class="hrate">完成'+done+'·进行中'+going+'</span></div>'+
+    return '<div class="hday"><div class="hhdr">&#128197; '+day.date+'<span class="hrate">完成'+done+'&middot;进行中'+going+'</span></div>'+
       day.tasks.map(function(t){
         return '<div class="task'+(t.done?' done':'')+'">'+
-          '<span style="font-size:13px;flex-shrink:0;color:'+(t.done?'#1D9E75':'#9d9d97')+';margin-top:2px">'+(t.done?'✓':'○')+'</span>'+
+          '<span style="font-size:13px;flex-shrink:0;color:'+(t.done?'#1D9E75':'#9d9d97')+';margin-top:2px">'+(t.done?'&#10003;':'&#9675;')+'</span>'+
           '<div class="tbody"><div class="ttext">'+esc(t.text)+'</div><div class="tmeta">'+priTag(t.pri)+catTag(t.cat)+dateStr(t)+'</div></div></div>';
       }).join('')+'</div>';
   }).join('');
 }
 
-async function genRpt(){
+function genRpt(){
   var type=document.getElementById('rpt-type').value;
   var extra=document.getElementById('rpt-extra').value.trim();
-  var out=document.getElementById('rpt-out'),btn=document.getElementById('gen-btn');
-  out.classList.remove('ph');out.textContent='正在汇总任务数据…';
-  btn.innerHTML='<span class="spinner"></span> 生成中';btn.disabled=true;
+  var out=document.getElementById('rpt-out');
   var daysMap={day:0,week:6,month:29,quarter:89,year:364};
-  var ps=addDays(TODAY,-daysMap[type]),pe=TODAY;
-  var label={day:'日报',week:'周报',month:'月报',quarter:'季度工作总结',year:'年度工作总结'}[type];
-  var all=tasks.concat(backlog).filter(function(t){return inPeriod(t,ps,pe);});
-  var completed=all.filter(function(t){return t.done&&t.completedDate>=ps&&t.completedDate<=pe;});
-  var ongoing=all.filter(function(t){return !t.done&&!isOverdue(t);});
-  var overdue=all.filter(function(t){return isOverdue(t);});
-  function fmt(arr){
-    if(!arr.length)return '  无';
-    return arr.map(function(t){
-      var pri=t.pri==='urgent'?'紧急':t.pri==='low'?'低优':'一般';
-      var line='- ['+(t.cat||'未分类')+'] '+t.text+'（'+pri;
-      if(t.startDate)line+='，开始:'+t.startDate;
-      if(t.dueDate)line+='，截止:'+t.dueDate;
-      if(t.completedDate)line+='，完成:'+t.completedDate;
-      return line+'）';
-    }).join('\n');
+  var ps=addDays(TODAY,-daysMap[type]);
+  var pe=TODAY;
+  var labelMap={day:'日报',week:'周报',month:'月报',quarter:'季度总结',year:'年度总结'};
+  var label=labelMap[type];
+  var all=tasks.concat(backlog);
+  var completed=all.filter(function(t){return t.done&&t.completedDate&&t.completedDate>=ps&&t.completedDate<=pe;});
+  var ongoing=all.filter(function(t){return !t.done&&!isOverdue(t)&&inPeriod(t,ps,pe);});
+  var overdue=all.filter(function(t){return isOverdue(t)&&inPeriod(t,ps,pe);});
+
+  var byCat={};
+  completed.forEach(function(t){
+    var c=t.cat||'未分类';
+    if(!byCat[c])byCat[c]=[];
+    byCat[c].push(t);
+  });
+
+  var lines=[];
+  lines.push('【'+label+'】'+(type==='day'?ps:(ps+' 至 '+pe)));
+  lines.push('');
+  lines.push('【已完成工作】（共 '+completed.length+' 项）');
+
+  if(completed.length===0){
+    lines.push('  无');
+  }else{
+    var catOrder=['政府市场','客户市场','品牌营销','部门建设','内部事务','临时工作','其他工作','未分类'];
+    var idx=1;
+    catOrder.forEach(function(cat){
+      if(!byCat[cat])return;
+      lines.push('');
+      lines.push('[' + cat + ']');
+      byCat[cat].forEach(function(t){
+        var line=idx+'. '+t.text;
+        if(t.completedDate)line+='（完成于 '+t.completedDate+'）';
+        lines.push(line);
+        idx++;
+      });
+    });
   }
-  var summary='统计区间：'+ps+' 至 '+pe+'\n\n【本期已完成】\n'+fmt(completed)+'\n\n【跨期进行中】\n'+fmt(ongoing)+'\n\n【逾期未完成】\n'+fmt(overdue);
-  var prompt='你是一个专业的职场助理，请根据以下工作任务记录生成一份【'+label+'】。\n使用中文，语言正式简练，按类别（政府市场/客户市场/品牌营销/部门建设/内部事务等）组织内容，分四个部分：\n1. 本期工作完成情况（按类别分组）\n2. 主要亮点与成果\n3. 未完成事项及原因分析\n4. 下期工作计划与重点\n\n'+summary+(extra?'\n\n补充说明：'+extra:'');
-  try{
-    var resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,messages:[{role:'user',content:prompt}]})});
-    var data=await resp.json();
-    var result=data.content?data.content.map(function(c){return c.text||'';}).join(''):'生成失败，请重试。';
-    out.textContent=result;
-    chatHistory=[];
-    document.getElementById('chat-msgs').innerHTML='';
-    document.getElementById('chat-wrap').style.display='block';
-  }catch(e){out.textContent='网络连接失败，请重试。';}
-  finally{btn.innerHTML='&#10022; AI 生成';btn.disabled=false;}
+
+  lines.push('');
+  lines.push('【进行中事项】（共 '+ongoing.length+' 项）');
+  if(ongoing.length===0){
+    lines.push('  无');
+  }else{
+    ongoing.forEach(function(t,i){
+      var line=(i+1)+'. ['+(t.cat||'未分类')+'] '+t.text;
+      var info=[];
+      if(t.startDate)info.push('开始 '+t.startDate);
+      if(t.dueDate)info.push('截止 '+t.dueDate);
+      if(info.length)line+='（'+info.join('，')+'）';
+      lines.push(line);
+    });
+  }
+
+  if(overdue.length>0){
+    lines.push('');
+    lines.push('【逾期未完成】（共 '+overdue.length+' 项）');
+    overdue.forEach(function(t,i){
+      var line=(i+1)+'. ['+(t.cat||'未分类')+'] '+t.text;
+      if(t.dueDate)line+='（截止 '+t.dueDate+'，已逾期）';
+      lines.push(line);
+    });
+  }
+
+  if(extra){
+    lines.push('');
+    lines.push('【补充说明】');
+    lines.push(extra);
+  }
+
+  lines.push('');
+  lines.push('---');
+  lines.push('提示：复制以上内容，发送给豆包/DeepSeek/文心一言等任意 AI 助手，让 AI 帮你生成完整的 '+label+'。');
+
+  out.classList.remove('ph');
+  out.textContent=lines.join('\n');
 }
 
 function copyRpt(){
   var text=document.getElementById('rpt-out').textContent;
   var b=document.getElementById('copy-btn');
-  function ok(){b.textContent='✓ 已复制';setTimeout(function(){b.textContent='📋 复制';},1800);}
+  function ok(){b.textContent='✓ 已复制';setTimeout(function(){b.textContent='📋 复制全文';},1800);}
   function fail(){
     var ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0';
     document.body.appendChild(ta);ta.focus();ta.select();
@@ -862,48 +996,7 @@ function copyRpt(){
   if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(ok).catch(fail);}else{fail();}
 }
 
-function appendMsg(role,text,applyable){
-  var wrap=document.getElementById('chat-msgs');
-  var div=document.createElement('div');div.className='msg '+(role==='user'?'msg-u':'msg-a');
-  var lbl=document.createElement('div');lbl.className='msg-lbl';lbl.textContent=role==='user'?'你':'AI';
-  var bubble=document.createElement('div');bubble.className='msg-bubble';bubble.textContent=text;
-  div.appendChild(lbl);div.appendChild(bubble);
-  if(applyable){
-    var ab=document.createElement('button');ab.className='apply-btn';ab.textContent='← 应用到报告';
-    (function(t){ab.onclick=function(){var o=document.getElementById('rpt-out');o.classList.remove('ph');o.textContent=t;};})(text);
-    div.appendChild(ab);
-  }
-  wrap.appendChild(div);wrap.scrollTop=wrap.scrollHeight;
-}
-
-async function sendChat(){
-  var input=document.getElementById('chat-input'),btn=document.getElementById('chat-btn');
-  var msg=input.value.trim();if(!msg)return;
-  var currentReport=document.getElementById('rpt-out').textContent;
-  if(!currentReport||currentReport.indexOf('点击')===0){appendMsg('ai','请先生成报告，再进行修改。',false);return;}
-  input.value='';input.style.height='38px';
-  appendMsg('user',msg,false);
-  chatHistory.push({role:'user',content:msg});
-  btn.innerHTML='<span class="spinner"></span>';btn.disabled=true;
-  var firstMsg='以下是当前报告草稿：\n\n'+currentReport+'\n\n修改建议：'+chatHistory[0].content;
-  var messages=[{role:'user',content:'你是一个专业的职场写作助理。请直接输出修改后的完整报告，不要解释修改了什么。\n\n'+firstMsg}];
-  for(var i=1;i<chatHistory.length;i++){messages.push(chatHistory[i]);}
-  try{
-    var resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,messages:messages})});
-    var data=await resp.json();
-    var reply=data.content?data.content.map(function(c){return c.text||'';}).join(''):'生成失败，请重试。';
-    chatHistory.push({role:'assistant',content:reply});
-    appendMsg('ai',reply,true);
-  }catch(e){appendMsg('ai','网络连接失败，请重试。',false);chatHistory.pop();}
-  finally{btn.innerHTML='发送';btn.disabled=false;}
-}
-
 document.addEventListener('DOMContentLoaded',function(){
-  var ta=document.getElementById('chat-input');
-  if(ta){
-    ta.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}});
-    ta.addEventListener('input',function(){ta.style.height='38px';ta.style.height=Math.min(ta.scrollHeight,100)+'px';});
-  }
   setSyncStatus('ing','连接中…');
   syncFromNotion();
 });
