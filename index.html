@@ -2,8 +2,10 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>个人工作计划管理工具</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>个人工作计划</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -18,66 +20,80 @@
   --border:rgba(255,255,255,0.09);--border-s:rgba(255,255,255,0.16);
   --accent:#2ec48f;
 }}
-body{font-family:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;background:var(--bg-t);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6;}
-.shell{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem;}
-h1{font-size:20px;font-weight:600;margin-bottom:3px;}
-.ds{font-size:13px;color:var(--muted);margin-bottom:1.2rem;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;background:var(--bg-t);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+.shell{max-width:900px;margin:0 auto;padding:1.5rem 1rem 5rem;}
+h1{font-size:20px;font-weight:600;margin-bottom:2px;}
+.ds{font-size:13px;color:var(--muted);margin-bottom:1rem;}
 
-/* Notion sync bar */
-.sync-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);margin-bottom:1.4rem;flex-wrap:wrap;}
-.sync-status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;}
+/* Sync bar */
+.sync-bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);margin-bottom:1.2rem;flex-wrap:wrap;}
+.sync-status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;flex:1;min-width:0;}
+.sync-status span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .sync-dot{width:7px;height:7px;border-radius:50%;background:var(--hint);flex-shrink:0;}
 .sync-dot.ok{background:#1D9E75;}
 .sync-dot.err{background:#E24B4A;}
 .sync-dot.ing{background:#BA7517;animation:pulse 1s infinite;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
-.sync-actions{margin-left:auto;display:flex;gap:6px;}
+.sync-actions{display:flex;gap:6px;flex-wrap:wrap;}
 
 /* Tabs */
-.tabs{display:flex;gap:2px;background:var(--bg-s);border-radius:var(--rl);padding:4px;margin-bottom:1.5rem;flex-wrap:wrap;}
-.tab{flex:1;padding:8px 8px;border:none;background:transparent;border-radius:var(--r);font-size:13px;cursor:pointer;color:var(--muted);font-family:inherit;display:flex;align-items:center;justify-content:center;gap:4px;transition:all .15s;white-space:nowrap;min-width:70px;}
+.tabs{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;background:var(--bg-s);border-radius:var(--rl);padding:3px;margin-bottom:1.2rem;}
+.tab{padding:7px 4px;border:none;background:transparent;border-radius:var(--r);font-size:12px;cursor:pointer;color:var(--muted);font-family:inherit;display:flex;align-items:center;justify-content:center;gap:3px;transition:all .15s;white-space:nowrap;line-height:1.2;}
+.tab .ti{font-size:14px;}
+.tab .tl{display:none;}
 .tab.active{background:var(--bg);color:var(--text);font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
 .tab:hover:not(.active){color:var(--text);}
 .panel{display:none;}.panel.active{display:block;}
 
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.2rem;}
-.stat{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:14px 12px;text-align:center;}
-.stat-num{font-size:22px;font-weight:600;line-height:1.2;}
-.stat-label{font-size:11px;color:var(--muted);margin-top:3px;}
-.prog-bar{height:5px;background:var(--bg-s);border-radius:3px;overflow:hidden;margin-bottom:1.4rem;}
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem;}
+.stat{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:12px 8px;text-align:center;}
+.stat-num{font-size:20px;font-weight:600;line-height:1.2;}
+.stat-label{font-size:11px;color:var(--muted);margin-top:2px;}
+.prog-bar{height:5px;background:var(--bg-s);border-radius:3px;overflow:hidden;margin-bottom:1.2rem;}
 .prog-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .4s;}
 
-.add-form{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:14px 16px;margin-bottom:1.4rem;}
-.ar{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+/* Add form */
+.add-form{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:12px;margin-bottom:1.2rem;}
+.ar{display:flex;gap:6px;margin-bottom:6px;align-items:center;}
 .ar:last-child{margin-bottom:0;}
-.add-form input[type=text],.add-form select,.add-form input[type=date]{flex:1;padding:8px 10px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg-s);color:var(--text);outline:none;transition:border-color .15s;min-width:0;}
-.add-form input:focus,.add-form select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(29,158,117,0.1);}
-.add-form input[type=date]{flex:0 0 136px;color-scheme:light dark;}
-.add-form select.sm{flex:0 0 80px;}
-.add-form select.md{flex:0 0 110px;}
-.lbl{font-size:12px;color:var(--hint);align-self:center;flex-shrink:0;}
+.add-form input[type=text]{flex:1;padding:9px 10px;font-size:14px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg-s);color:var(--text);outline:none;min-width:0;}
+.add-form input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(29,158,117,0.1);}
+.add-form select{padding:9px 6px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg-s);color:var(--text);outline:none;min-width:0;}
+.add-form select:focus{border-color:var(--accent);}
+.sel-pri{flex:0 0 72px;}
+.sel-cat{flex:1;min-width:0;}
+.date-row{display:flex;gap:6px;align-items:center;}
+.date-group{display:flex;align-items:center;gap:4px;flex:1;min-width:0;}
+.date-group label{font-size:12px;color:var(--hint);flex-shrink:0;}
+.date-group input[type=date]{flex:1;padding:8px 6px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg-s);color:var(--text);outline:none;min-width:0;color-scheme:light dark;}
+.date-group input[type=date]:focus{border-color:var(--accent);}
 
-.btn{padding:8px 14px;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;transition:background .15s;}
+/* Buttons */
+.btn{padding:8px 12px;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;transition:background .15s;-webkit-tap-highlight-color:transparent;}
 .btn:hover{background:var(--bg-s);}
-.btn:active{transform:scale(0.98);}
+.btn:active{transform:scale(0.97);}
 .btn-p{background:var(--accent);border-color:var(--accent);color:#fff;}
 .btn-p:hover{background:#18876a;border-color:#18876a;}
-.btn-sm{padding:3px 9px;font-size:11px;}
+.btn-add{width:100%;justify-content:center;margin-top:6px;padding:10px;}
+.btn-sm{padding:5px 10px;font-size:12px;}
 
-.sec{font-size:11px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;margin-top:1.4rem;display:flex;align-items:center;gap:8px;}
+/* Section */
+.sec{font-size:11px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;margin-top:1.2rem;display:flex;align-items:center;gap:6px;}
 .sec:first-child{margin-top:0;}
 .sec-count{background:var(--bg-s);border-radius:20px;padding:1px 7px;font-size:11px;color:var(--muted);}
 
+/* Task */
 .tlist{display:flex;flex-direction:column;gap:5px;}
-.task{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r);transition:border-color .15s;}
-.task:hover{border-color:var(--border-s);}
+.task{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r);}
 .task.done{opacity:.55;}
-.tcb{margin-top:2px;width:15px;height:15px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;}
+.tcb{margin-top:3px;width:16px;height:16px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;}
 .tbody{flex:1;min-width:0;}
-.ttext{font-size:14px;word-break:break-word;}
+.ttext{font-size:14px;word-break:break-word;line-height:1.4;}
 .task.done .ttext{text-decoration:line-through;color:var(--hint);}
-.tmeta{display:flex;align-items:center;gap:5px;margin-top:4px;flex-wrap:wrap;}
-.tag{font-size:11px;font-weight:500;padding:1px 7px;border-radius:20px;flex-shrink:0;}
+.tmeta{display:flex;align-items:center;gap:4px;margin-top:4px;flex-wrap:wrap;}
+.tag{font-size:11px;font-weight:500;padding:1px 6px;border-radius:20px;flex-shrink:0;}
 .t-urgent{background:#FAECE7;color:#993C1D;}
 .t-mid{background:#FAEEDA;color:#854F0B;}
 .t-low{background:#EAF3DE;color:#3B6D11;}
@@ -100,76 +116,96 @@ h1{font-size:20px;font-weight:600;margin-bottom:3px;}
   .t-local{background:#412402;color:#FAC775;}
 }
 .dstr{font-size:11px;color:var(--hint);}
-.tacts{display:flex;align-items:center;gap:4px;flex-shrink:0;margin-top:1px;}
-.ibtn{background:none;border:none;cursor:pointer;color:var(--hint);font-size:16px;line-height:1;padding:2px 3px;transition:color .15s;}
+.tacts{display:flex;align-items:center;gap:3px;flex-shrink:0;margin-top:1px;}
+.ibtn{background:none;border:none;cursor:pointer;color:var(--hint);font-size:18px;line-height:1;padding:3px;-webkit-tap-highlight-color:transparent;}
 .ibtn:hover{color:var(--text);}
 .empty{text-align:center;color:var(--hint);font-size:13px;padding:24px 0;}
+.promote-btn{padding:3px 8px;font-size:11px;}
 
-.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:1.5rem;}
-.stat-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:16px;}
-.stat-card h3{font-size:12px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;}
-.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
-.bar-label{font-size:12px;color:var(--muted);width:72px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.bar-wrap{flex:1;height:8px;background:var(--bg-s);border-radius:4px;overflow:hidden;}
+/* Stats panel */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.2rem;}
+.stat-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:14px;}
+.stat-card h3{font-size:11px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;}
+.stat-card.full{grid-column:1/-1;}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.bar-label{font-size:12px;color:var(--muted);width:68px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.bar-wrap{flex:1;height:7px;background:var(--bg-s);border-radius:4px;overflow:hidden;}
 .bar-fill{height:100%;border-radius:4px;transition:width .5s;}
-.bar-val{font-size:12px;color:var(--muted);width:28px;text-align:right;flex-shrink:0;}
-.rate-circle{display:flex;align-items:center;justify-content:center;flex-direction:column;padding:8px 0;}
-.rate-num{font-size:36px;font-weight:600;color:var(--accent);}
-.rate-sub{font-size:12px;color:var(--muted);margin-top:2px;}
-.week-row{display:flex;gap:4px;margin-top:4px;}
+.bar-val{font-size:12px;color:var(--muted);width:24px;text-align:right;flex-shrink:0;}
+.rate-circle{display:flex;align-items:center;justify-content:center;flex-direction:column;padding:6px 0;}
+.rate-num{font-size:32px;font-weight:600;color:var(--accent);}
+.rate-sub{font-size:12px;color:var(--muted);margin-top:2px;text-align:center;}
+.week-row{display:flex;gap:3px;}
 .week-day{flex:1;text-align:center;}
-.week-day .wd-label{font-size:10px;color:var(--hint);margin-bottom:3px;}
-.week-day .wd-bar{height:40px;background:var(--bg-s);border-radius:3px;display:flex;align-items:flex-end;overflow:hidden;}
-.week-day .wd-fill{width:100%;border-radius:3px;transition:height .4s;}
-.week-day .wd-num{font-size:10px;color:var(--muted);margin-top:2px;}
+.wd-label{font-size:10px;color:var(--hint);margin-bottom:2px;}
+.wd-bar{height:36px;background:var(--bg-s);border-radius:3px;display:flex;align-items:flex-end;overflow:hidden;}
+.wd-fill{width:100%;border-radius:3px;transition:height .4s;}
+.wd-num{font-size:10px;color:var(--muted);margin-top:2px;}
 
-.gantt-wrap{overflow-x:auto;margin-top:4px;}
-.gantt-header{display:flex;border-bottom:0.5px solid var(--border);margin-bottom:6px;padding-bottom:4px;}
-.gantt-task-col{width:160px;flex-shrink:0;font-size:11px;color:var(--hint);font-weight:600;text-transform:uppercase;}
-.gantt-dates{flex:1;position:relative;height:16px;}
+/* Gantt */
+.gantt-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.gantt-header{display:flex;border-bottom:0.5px solid var(--border);margin-bottom:5px;padding-bottom:3px;}
+.gantt-task-col{width:120px;flex-shrink:0;font-size:10px;color:var(--hint);font-weight:600;text-transform:uppercase;}
+.gantt-dates{flex:1;position:relative;height:14px;}
 .gantt-date-lbl{position:absolute;font-size:10px;color:var(--hint);transform:translateX(-50%);}
-.gantt-row{display:flex;align-items:center;margin-bottom:5px;min-height:26px;}
-.gantt-name{width:160px;flex-shrink:0;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:8px;color:var(--text);}
-.gantt-track{flex:1;position:relative;height:20px;}
-.gantt-bar{position:absolute;height:100%;border-radius:4px;display:flex;align-items:center;padding:0 6px;font-size:10px;color:#fff;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.gantt-row{display:flex;align-items:center;margin-bottom:4px;min-height:24px;}
+.gantt-name{width:120px;flex-shrink:0;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:6px;color:var(--text);}
+.gantt-track{flex:1;position:relative;height:18px;}
+.gantt-bar{position:absolute;height:100%;border-radius:3px;display:flex;align-items:center;padding:0 5px;font-size:10px;color:#fff;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
 .gantt-today-line{position:absolute;top:-2px;bottom:-2px;width:1.5px;background:#E24B4A;opacity:.7;z-index:2;}
 .gantt-empty{color:var(--hint);font-size:13px;padding:20px 0;text-align:center;}
+.gantt-filters{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap;}
+.gantt-filters select{padding:7px 8px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg);color:var(--text);outline:none;flex:1;}
 
-.hday{margin-bottom:1.2rem;}
-.hhdr{display:flex;align-items:center;gap:8px;padding:7px 14px;background:var(--bg-s);border-radius:var(--r);margin-bottom:5px;font-size:13px;font-weight:500;}
+/* History */
+.hday{margin-bottom:1rem;}
+.hhdr{display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--bg-s);border-radius:var(--r);margin-bottom:4px;font-size:13px;font-weight:500;}
 .hrate{margin-left:auto;font-size:11px;color:var(--muted);}
 
-.rc{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;}
-.rc select,.rc input[type=text]{padding:8px 10px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg);color:var(--text);outline:none;}
-.rc input[type=text]{flex:1;min-width:140px;}
-.rbox{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:1.2rem;font-size:13px;line-height:1.9;min-height:200px;white-space:pre-wrap;word-break:break-word;}
+/* Report */
+.rc{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap;}
+.rc select{padding:9px 8px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg);color:var(--text);outline:none;flex:1;}
+.rc input[type=text]{padding:9px 10px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg);color:var(--text);outline:none;flex:2;min-width:0;}
+.rbox{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:1rem;font-size:13px;line-height:1.9;min-height:180px;white-space:pre-wrap;word-break:break-word;}
 .rbox.ph{color:var(--hint);}
+.rc-btns{display:flex;gap:6px;margin-bottom:1rem;}
 
+/* Chat */
 .chat-wrap{margin-top:1rem;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);overflow:hidden;}
-.chat-title{font-size:12px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:.05em;padding:10px 14px;border-bottom:0.5px solid var(--border);background:var(--bg-s);}
-.chat-msgs{max-height:300px;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px;min-height:48px;}
+.chat-title{font-size:12px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:.05em;padding:9px 12px;border-bottom:0.5px solid var(--border);background:var(--bg-s);}
+.chat-msgs{max-height:260px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px 12px;display:flex;flex-direction:column;gap:8px;min-height:40px;}
 .msg{display:flex;flex-direction:column;gap:3px;max-width:88%;}
 .msg-u{align-self:flex-end;align-items:flex-end;}
 .msg-a{align-self:flex-start;}
-.msg-bubble{padding:8px 12px;border-radius:10px;font-size:13px;line-height:1.7;white-space:pre-wrap;word-break:break-word;}
+.msg-bubble{padding:8px 10px;border-radius:10px;font-size:13px;line-height:1.6;white-space:pre-wrap;word-break:break-word;}
 .msg-u .msg-bubble{background:var(--accent);color:#fff;border-bottom-right-radius:3px;}
 .msg-a .msg-bubble{background:var(--bg-s);color:var(--text);border-bottom-left-radius:3px;}
-.msg-lbl{font-size:11px;color:var(--hint);padding:0 4px;}
-.apply-btn{font-size:12px;color:var(--accent);background:none;border:none;cursor:pointer;padding:2px 4px;text-decoration:underline;text-underline-offset:2px;align-self:flex-start;}
-.apply-btn:hover{opacity:.7;}
-.chat-ir{display:flex;gap:8px;padding:10px 12px;border-top:0.5px solid var(--border);}
-.chat-ir textarea{flex:1;padding:8px 10px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg-s);color:var(--text);outline:none;resize:none;height:38px;max-height:120px;line-height:1.5;transition:border-color .15s;}
-.chat-ir textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(29,158,117,0.1);}
+.msg-lbl{font-size:11px;color:var(--hint);padding:0 3px;}
+.apply-btn{font-size:12px;color:var(--accent);background:none;border:none;cursor:pointer;padding:2px 3px;text-decoration:underline;text-underline-offset:2px;}
+.chat-ir{display:flex;gap:6px;padding:8px 10px;border-top:0.5px solid var(--border);}
+.chat-ir textarea{flex:1;padding:8px 10px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg-s);color:var(--text);outline:none;resize:none;height:38px;max-height:100px;line-height:1.5;}
+.chat-ir textarea:focus{border-color:var(--accent);}
 
 .spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;}
-.spinner-dark{border-color:rgba(0,0,0,0.15);border-top-color:var(--muted);}
 @keyframes spin{to{transform:rotate(360deg);}}
 
-@media(max-width:600px){
-  .stats{grid-template-columns:repeat(2,1fr);}
-  .stat-grid{grid-template-columns:1fr;}
-  .shell{padding:1rem 1rem 3rem;}
-  .gantt-name,.gantt-task-col{width:100px;}
+/* Desktop enhancements */
+@media(min-width:600px){
+  .shell{padding:2rem 1.5rem 4rem;}
+  h1{font-size:22px;}
+  .tab .tl{display:inline;}
+  .tab .ti{font-size:15px;}
+  .tab{font-size:13px;padding:8px 6px;}
+  .stats{gap:10px;}
+  .stat-num{font-size:22px;}
+  .stat{padding:14px 12px;}
+  .add-form{padding:14px 16px;}
+  .add-form input[type=text]{font-size:14px;}
+  .ar{gap:8px;}
+  .date-row{flex-wrap:nowrap;}
+  .sync-actions{flex-wrap:nowrap;}
+  .gantt-task-col,.gantt-name{width:160px;}
+  .stat-grid{gap:16px;}
 }
 </style>
 </head>
@@ -178,25 +214,26 @@ h1{font-size:20px;font-weight:600;margin-bottom:3px;}
   <h1>个人工作计划管理工具</h1>
   <div class="ds" id="dstr"></div>
 
-  <!-- Notion 同步状态栏 -->
   <div class="sync-bar">
     <div class="sync-status">
       <div class="sync-dot" id="sync-dot"></div>
-      <span id="sync-msg">未连接 Notion</span>
+      <span id="sync-msg">连接中…</span>
     </div>
     <div class="sync-actions">
-      <button class="btn btn-sm" onclick="syncFromNotion()" id="pull-btn">&#8595; 从 Notion 同步</button>
-      <button class="btn btn-sm btn-p" onclick="syncToNotion()" id="push-btn">&#8593; 推送到 Notion</button>
+      <button class="btn btn-sm" onclick="syncFromNotion()" id="pull-btn">&#8595; 同步</button>
+      <button class="btn btn-sm btn-p" onclick="syncToNotion()" id="push-btn">&#8593; 推送</button>
+      <button class="btn btn-sm" onclick="exportData()">&#8681; 导出</button>
+      <label class="btn btn-sm" style="cursor:pointer">&#8679; 导入<input type="file" accept=".json" onchange="importData(event)" style="display:none"></label>
     </div>
   </div>
 
   <div class="tabs">
-    <button class="tab active" onclick="sw('today',this)">&#128197; 今日</button>
-    <button class="tab" onclick="sw('backlog',this)">&#128203; 待办池</button>
-    <button class="tab" onclick="sw('gantt',this)">&#128202; 甘特图</button>
-    <button class="tab" onclick="sw('stats',this)">&#128200; 统计</button>
-    <button class="tab" onclick="sw('history',this)">&#128336; 历史</button>
-    <button class="tab" onclick="sw('report',this)">&#128221; 报告</button>
+    <button class="tab active" onclick="sw('today',this)"><span class="ti">📅</span><span class="tl"> 今日</span></button>
+    <button class="tab" onclick="sw('backlog',this)"><span class="ti">📋</span><span class="tl"> 待办</span></button>
+    <button class="tab" onclick="sw('gantt',this)"><span class="ti">📊</span><span class="tl"> 甘特</span></button>
+    <button class="tab" onclick="sw('stats',this)"><span class="ti">📈</span><span class="tl"> 统计</span></button>
+    <button class="tab" onclick="sw('history',this)"><span class="ti">🕐</span><span class="tl"> 历史</span></button>
+    <button class="tab" onclick="sw('report',this)"><span class="ti">📝</span><span class="tl"> 报告</span></button>
   </div>
 
   <!-- 今日 -->
@@ -205,18 +242,20 @@ h1{font-size:20px;font-weight:600;margin-bottom:3px;}
       <div class="stat"><div class="stat-num" id="s-total">0</div><div class="stat-label">今日任务</div></div>
       <div class="stat"><div class="stat-num" id="s-done">0</div><div class="stat-label">已完成</div></div>
       <div class="stat"><div class="stat-num" id="s-going">0</div><div class="stat-label">进行中</div></div>
-      <div class="stat"><div class="stat-num" id="s-streak">0</div><div class="stat-label">连续完工天</div></div>
+      <div class="stat"><div class="stat-num" id="s-streak">0</div><div class="stat-label">连续完工</div></div>
     </div>
     <div class="prog-bar"><div class="prog-fill" id="prog" style="width:0%"></div></div>
     <div class="add-form">
       <div class="ar">
-        <input type="text" id="t-text" placeholder="任务名称…" onkeydown="if(event.key==='Enter')addTask()">
-        <select id="t-pri" class="sm">
+        <input type="text" id="t-text" placeholder="任务名称…">
+        <select id="t-pri" class="sel-pri">
           <option value="urgent">紧急</option>
           <option value="mid" selected>一般</option>
           <option value="low">低优</option>
         </select>
-        <select id="t-cat" class="md">
+      </div>
+      <div class="ar">
+        <select id="t-cat" class="sel-cat">
           <option value="">选择类别</option>
           <option value="政府市场">政府市场</option>
           <option value="客户市场">客户市场</option>
@@ -227,11 +266,11 @@ h1{font-size:20px;font-weight:600;margin-bottom:3px;}
           <option value="其他工作">其他工作</option>
         </select>
       </div>
-      <div class="ar">
-        <span class="lbl">开始</span><input type="date" id="t-start">
-        <span class="lbl">截止</span><input type="date" id="t-due">
-        <button class="btn btn-p" onclick="addTask()">＋ 添加</button>
+      <div class="ar date-row">
+        <div class="date-group"><label>开始</label><input type="date" id="t-start"></div>
+        <div class="date-group"><label>截止</label><input type="date" id="t-due"></div>
       </div>
+      <button class="btn btn-p btn-add" onclick="addTask()">＋ 添加任务</button>
     </div>
     <div class="sec">今日任务</div>
     <div class="tlist" id="today-list"></div>
@@ -241,13 +280,15 @@ h1{font-size:20px;font-weight:600;margin-bottom:3px;}
   <div id="tab-backlog" class="panel">
     <div class="add-form">
       <div class="ar">
-        <input type="text" id="bl-text" placeholder="待办项名称…" onkeydown="if(event.key==='Enter')addBL()">
-        <select id="bl-pri" class="sm">
+        <input type="text" id="bl-text" placeholder="待办项名称…">
+        <select id="bl-pri" class="sel-pri">
           <option value="urgent">紧急</option>
           <option value="mid" selected>一般</option>
           <option value="low">低优</option>
         </select>
-        <select id="bl-cat" class="md">
+      </div>
+      <div class="ar">
+        <select id="bl-cat" class="sel-cat">
           <option value="">选择类别</option>
           <option value="政府市场">政府市场</option>
           <option value="客户市场">客户市场</option>
@@ -258,24 +299,24 @@ h1{font-size:20px;font-weight:600;margin-bottom:3px;}
           <option value="其他工作">其他工作</option>
         </select>
       </div>
-      <div class="ar">
-        <span class="lbl">开始</span><input type="date" id="bl-start">
-        <span class="lbl">截止</span><input type="date" id="bl-due">
-        <button class="btn btn-p" onclick="addBL()">＋ 添加</button>
+      <div class="ar date-row">
+        <div class="date-group"><label>开始</label><input type="date" id="bl-start"></div>
+        <div class="date-group"><label>截止</label><input type="date" id="bl-due"></div>
       </div>
+      <button class="btn btn-p btn-add" onclick="addBL()">＋ 添加待办</button>
     </div>
     <div id="bl-sections"></div>
   </div>
 
   <!-- 甘特图 -->
   <div id="tab-gantt" class="panel">
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:1rem;flex-wrap:wrap;">
-      <select id="gantt-range" onchange="renderGantt()" style="padding:7px 10px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg);color:var(--text);outline:none;">
+    <div class="gantt-filters">
+      <select id="gantt-range" onchange="renderGantt()">
         <option value="30">近30天</option>
         <option value="60">近60天</option>
         <option value="90">近90天</option>
       </select>
-      <select id="gantt-cat" onchange="renderGantt()" style="padding:7px 10px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg);color:var(--text);outline:none;">
+      <select id="gantt-cat" onchange="renderGantt()">
         <option value="">全部类别</option>
         <option value="政府市场">政府市场</option>
         <option value="客户市场">客户市场</option>
@@ -285,15 +326,14 @@ h1{font-size:20px;font-weight:600;margin-bottom:3px;}
         <option value="临时工作">临时工作</option>
         <option value="其他工作">其他工作</option>
       </select>
-      <span style="font-size:12px;color:var(--hint);">红线 = 今天</span>
     </div>
     <div class="gantt-wrap"><div id="gantt-body"></div></div>
   </div>
 
   <!-- 统计 -->
   <div id="tab-stats" class="panel">
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:1.2rem;">
-      <select id="stat-range" onchange="renderStats()" style="padding:7px 10px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg);color:var(--text);outline:none;">
+    <div style="margin-bottom:1rem;">
+      <select id="stat-range" onchange="renderStats()" style="padding:7px 8px;font-size:13px;font-family:inherit;border:0.5px solid var(--border-s);border-radius:var(--r);background:var(--bg);color:var(--text);outline:none;">
         <option value="7">近7天</option>
         <option value="30" selected>近30天</option>
         <option value="90">近90天</option>
@@ -318,28 +358,28 @@ h1{font-size:20px;font-weight:600;margin-bottom:3px;}
         <option value="year">年度总结</option>
       </select>
       <input type="text" id="rpt-extra" placeholder="补充说明（可选）">
-      <button class="btn btn-p" onclick="genRpt()" id="gen-btn">&#10022; AI 生成</button>
-      <button class="btn" onclick="copyRpt()" id="copy-btn">&#128203; 复制</button>
+    </div>
+    <div class="rc-btns">
+      <button class="btn btn-p" onclick="genRpt()" id="gen-btn" style="flex:1;justify-content:center;">&#10022; AI 生成</button>
+      <button class="btn" onclick="copyRpt()" id="copy-btn" style="flex:1;justify-content:center;">&#128203; 复制</button>
     </div>
     <div class="rbox ph" id="rpt-out">点击"AI 生成"，自动汇总工作记录并生成报告草稿…</div>
     <div class="chat-wrap" id="chat-wrap" style="display:none">
-      <div class="chat-title">&#128172; 修改建议 — 告诉 AI 怎么改，点"应用"替换上方报告</div>
+      <div class="chat-title">&#128172; 修改建议</div>
       <div class="chat-msgs" id="chat-msgs"></div>
       <div class="chat-ir">
-        <textarea id="chat-input" placeholder="例如：语气更正式一些 / 展开第三部分 / 加上下周重点计划…"></textarea>
-        <button class="btn btn-p" onclick="sendChat()" id="chat-btn" style="align-self:flex-end;padding:8px 14px;">发送</button>
+        <textarea id="chat-input" placeholder="例如：语气更正式 / 展开第三部分…"></textarea>
+        <button class="btn btn-p" onclick="sendChat()" id="chat-btn" style="align-self:flex-end;">发送</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-// ── Config ───────────────────────────────────────────────────────────────────
 var NOTION_TOKEN = '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';
 var NOTION_DB    = '35d43d9e3e6980158777c57cde2287b6';
 var PROXY        = 'https://notion-proxy.zhuzhu6223.workers.dev';
 
-// ── Core ─────────────────────────────────────────────────────────────────────
 var TODAY = new Date().toISOString().slice(0,10);
 document.getElementById('dstr').textContent = new Date().toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
 document.getElementById('t-start').value = TODAY;
@@ -352,175 +392,16 @@ function addDays(d,n){var dt=new Date(d);dt.setDate(dt.getDate()+n);return dt.to
 function fmtD(d){if(!d)return '';var p=d.split('-');return p[1]+'/'+p[2];}
 function diffDays(a,b){return Math.round((new Date(b)-new Date(a))/86400000);}
 
-var tasks   = ls('wp5_tasks',[]);
-var backlog = ls('wp5_bl',[]);
-var streak  = ls('wp5_streak',{last:'',count:0});
+var tasks   = ls('wp6_tasks',[]);
+var backlog = ls('wp6_bl',[]);
+var streak  = ls('wp6_streak',{last:'',count:0});
 var chatHistory = [];
-
 var CATS       = ['政府市场','客户市场','品牌营销','部门建设','内部事务','临时工作','其他工作'];
 var CAT_COLORS = ['#1D9E75','#185FA5','#BA7517','#534AB7','#993C1D','#0F6E56','#6b6b66'];
 
-function saveTasks(){ss('wp5_tasks',tasks);}
-function saveBL(){ss('wp5_bl',backlog);}
+function saveTasks(){ss('wp6_tasks',tasks);}
+function saveBL(){ss('wp6_bl',backlog);}
 
-// ── Notion API (via proxy to handle CORS) ─────────────────────────────────────
-// NOTE: Direct browser→Notion API calls are blocked by CORS.
-// We use a lightweight Cloudflare Worker as a proxy.
-// If you haven't set up the proxy yet, sync buttons will show an error.
-async function notionReq(method, path, body){
-  var url = PROXY + path;
-  var opts = {
-    method: method,
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Notion-Token': NOTION_TOKEN
-    }
-  };
-  if(body) opts.body = JSON.stringify(body);
-  var resp = await fetch(url, opts);
-  if(!resp.ok){
-    var err = await resp.text();
-    throw new Error('Notion API error ' + resp.status + ': ' + err);
-  }
-  return await resp.json();
-}
-
-// ── Sync status UI ────────────────────────────────────────────────────────────
-function setSyncStatus(state, msg){
-  var dot = document.getElementById('sync-dot');
-  var txt = document.getElementById('sync-msg');
-  dot.className = 'sync-dot' + (state==='ok'?' ok':state==='err'?' err':state==='ing'?' ing':'');
-  txt.textContent = msg;
-}
-
-// ── Push to Notion ────────────────────────────────────────────────────────────
-async function syncToNotion(){
-  setSyncStatus('ing','正在推送到 Notion…');
-  document.getElementById('push-btn').disabled = true;
-  var all = tasks.concat(backlog);
-  var errors = 0;
-  for(var i=0;i<all.length;i++){
-    var t = all[i];
-    if(t.notionId){
-      // Update existing page
-      try{
-        await notionReq('PATCH','/pages/'+t.notionId, buildNotionProps(t));
-      }catch(e){ errors++; }
-    } else {
-      // Create new page
-      try{
-        var res = await notionReq('POST','/pages',{
-          parent:{database_id: NOTION_DB},
-          properties: buildNotionProps(t).properties
-        });
-        t.notionId = res.id;
-      }catch(e){ errors++; }
-    }
-  }
-  saveTasks(); saveBL();
-  if(errors===0){
-    setSyncStatus('ok','已同步到 Notion (' + new Date().toLocaleTimeString('zh-CN') + ')');
-  } else {
-    setSyncStatus('err','同步完成，' + errors + ' 项失败');
-  }
-  document.getElementById('push-btn').disabled = false;
-  renderAll();
-}
-
-// ── Pull from Notion ──────────────────────────────────────────────────────────
-async function syncFromNotion(){
-  setSyncStatus('ing','正在从 Notion 同步…');
-  document.getElementById('pull-btn').disabled = true;
-  try{
-    var data = await notionReq('POST','/databases/'+NOTION_DB+'/query',{page_size:100});
-    var pages = data.results || [];
-    // Merge: update existing by notionId, add new ones
-    pages.forEach(function(page){
-      var props = page.properties;
-      var t = parseNotionPage(page);
-      // Find existing by notionId
-      var idx = tasks.findIndex(function(x){return x.notionId===page.id;});
-      var bidx = backlog.findIndex(function(x){return x.notionId===page.id;});
-      if(idx>=0){
-        tasks[idx] = Object.assign(tasks[idx], t);
-      } else if(bidx>=0){
-        backlog[bidx] = Object.assign(backlog[bidx], t);
-      } else {
-        // New task from Notion — decide tasks vs backlog
-        if(!t.startDate || t.startDate <= TODAY){
-          tasks.push(t);
-        } else {
-          backlog.push(t);
-        }
-      }
-    });
-    saveTasks(); saveBL();
-    setSyncStatus('ok','已从 Notion 同步 (' + new Date().toLocaleTimeString('zh-CN') + ')');
-    renderAll();
-  }catch(e){
-    setSyncStatus('err','同步失败：' + e.message);
-  }
-  document.getElementById('pull-btn').disabled = false;
-}
-
-// ── Build Notion properties from local task ───────────────────────────────────
-function buildNotionProps(t){
-  var priMap = {urgent:'紧急',mid:'一般',low:'低优'};
-  var props = {
-    '任务名称': {title:[{text:{content: t.text||''}}]},
-    '优先级':   {select: t.pri ? {name: priMap[t.pri]||'一般'} : null},
-    '类别':     {select: t.cat ? {name: t.cat} : null},
-    '状态':     {status: {name: t.done ? '完成' : (t.startDate&&t.startDate<=TODAY ? '进行中' : '未开始')}}
-  };
-  if(t.startDate)    props['开始日期']  = {date:{start: t.startDate}};
-  if(t.dueDate)      props['截止日期']  = {date:{start: t.dueDate}};
-  if(t.completedDate)props['完成日期']  = {date:{start: t.completedDate}};
-  return {properties: props};
-}
-
-// ── Parse Notion page to local task ──────────────────────────────────────────
-function parseNotionPage(page){
-  var p = page.properties;
-  var priRev = {'紧急':'urgent','一般':'mid','低优':'low'};
-  function txt(prop){ return prop&&prop.title&&prop.title[0]?prop.title[0].plain_text:''; }
-  function sel(prop){ return prop&&prop.select?prop.select.name:''; }
-  function sts(prop){ return prop&&prop.status?prop.status.name:''; }
-  function dt(prop){  return prop&&prop.date?prop.date.start:''; }
-  var statusName = sts(p['状态']);
-  var done = statusName === '完成';
-  return {
-    id: page.id.replace(/-/g,'').slice(0,13)*1 || Date.now(),
-    notionId: page.id,
-    text: txt(p['任务名称']),
-    pri:  priRev[sel(p['优先级'])] || 'mid',
-    cat:  sel(p['类别']),
-    startDate:     dt(p['开始日期']),
-    dueDate:       dt(p['截止日期']),
-    completedDate: dt(p['完成日期']),
-    createdDate:   TODAY,
-    done: done
-  };
-}
-
-// ── Auto-push single task to Notion ──────────────────────────────────────────
-async function pushOne(t){
-  try{
-    if(t.notionId){
-      await notionReq('PATCH','/pages/'+t.notionId, buildNotionProps(t));
-    } else {
-      var res = await notionReq('POST','/pages',{
-        parent:{database_id: NOTION_DB},
-        properties: buildNotionProps(t).properties
-      });
-      t.notionId = res.id;
-    }
-    setSyncStatus('ok','已同步 (' + new Date().toLocaleTimeString('zh-CN') + ')');
-  }catch(e){
-    setSyncStatus('err','同步失败，数据已本地保存');
-  }
-}
-
-// ── Task helpers ──────────────────────────────────────────────────────────────
 function overlaps(t,d){
   var s=t.startDate||t.createdDate||TODAY;
   var e=t.completedDate||t.dueDate||s;
@@ -555,13 +436,13 @@ function priTag(p){
   return '<span class="tag t-mid">一般</span>';
 }
 function catTag(c){return c?'<span class="tag t-cat">'+esc(c)+'</span>':'';}
-function syncTag(t){return t.notionId?'<span class="tag t-synced">&#10003; Notion</span>':'<span class="tag t-local">本地</span>';}
+function syncTag(t){return t.notionId?'<span class="tag t-synced">&#10003;N</span>':'<span class="tag t-local">本地</span>';}
 function dateStr(t){
   var s=fmtD(t.startDate),d=fmtD(t.dueDate),c=fmtD(t.completedDate);
-  if(c)return '<span class="dstr">&#10003; '+c+'完成</span>';
+  if(c)return '<span class="dstr">&#10003;'+c+'</span>';
   if(s&&d)return '<span class="dstr">'+s+'&#8594;'+d+'</span>';
   if(d)return '<span class="dstr">截止'+d+'</span>';
-  if(s)return '<span class="dstr">'+s+'开始</span>';
+  if(s)return '<span class="dstr">'+s+'起</span>';
   return '';
 }
 function taskHtml(t,toggleFn,delFn,extra){
@@ -584,6 +465,161 @@ function sw(name,btn){
   renderAll();
 }
 
+// ── Notion API ────────────────────────────────────────────────────────────────
+async function notionReq(method,path,body){
+  var opts={method:method,headers:{'Content-Type':'application/json','X-Notion-Token':NOTION_TOKEN}};
+  if(body)opts.body=JSON.stringify(body);
+  var resp=await fetch(PROXY+path,opts);
+  var text=await resp.text();
+  if(!resp.ok)throw new Error(text);
+  return JSON.parse(text);
+}
+
+function setSyncStatus(state,msg){
+  var dot=document.getElementById('sync-dot');
+  var txt=document.getElementById('sync-msg');
+  dot.className='sync-dot'+(state==='ok'?' ok':state==='err'?' err':state==='ing'?' ing':'');
+  txt.textContent=msg;
+}
+
+function buildNotionProps(t){
+  var priMap={urgent:'紧急',mid:'一般',low:'低优'};
+  var statusName=t.done?'完成':(t.startDate&&t.startDate<=TODAY?'进行中':'未开始');
+  var props={
+    '任务名称':{title:[{text:{content:t.text||''}}]},
+    '优先级':{select:t.pri?{name:priMap[t.pri]||'一般'}:null},
+    '类别':{select:t.cat?{name:t.cat}:null},
+    '状态':{status:{name:statusName}}
+  };
+  if(t.startDate)props['开始日期']={date:{start:t.startDate}};
+  if(t.dueDate)props['截止日期']={date:{start:t.dueDate}};
+  if(t.completedDate)props['完成日期']={date:{start:t.completedDate}};
+  return {properties:props};
+}
+
+function parseNotionPage(page){
+  var p=page.properties;
+  var priRev={'紧急':'urgent','一般':'mid','低优':'low'};
+  function txt(prop){return prop&&prop.title&&prop.title[0]?prop.title[0].plain_text:'';}
+  function sel(prop){return prop&&prop.select?prop.select.name:'';}
+  function sts(prop){return prop&&prop.status?prop.status.name:'';}
+  function dt(prop){return prop&&prop.date?prop.date.start:'';}
+  var done=sts(p['状态'])==='完成';
+  return {
+    id:Date.now()+Math.random(),notionId:page.id,
+    text:txt(p['任务名称']),
+    pri:priRev[sel(p['优先级'])]||'mid',
+    cat:sel(p['类别']),
+    startDate:dt(p['开始日期']),
+    dueDate:dt(p['截止日期']),
+    completedDate:dt(p['完成日期']),
+    createdDate:TODAY,done:done
+  };
+}
+
+async function pushOne(t){
+  try{
+    if(t.notionId){
+      await notionReq('PATCH','/pages/'+t.notionId,buildNotionProps(t));
+    }else{
+      var res=await notionReq('POST','/pages',{parent:{database_id:NOTION_DB},properties:buildNotionProps(t).properties});
+      t.notionId=res.id;
+    }
+    setSyncStatus('ok','已同步 ('+new Date().toLocaleTimeString('zh-CN')+')');
+  }catch(e){setSyncStatus('err','同步失败，数据已本地保存');}
+}
+
+async function syncToNotion(){
+  setSyncStatus('ing','推送中…');
+  document.getElementById('push-btn').disabled=true;
+  var all=tasks.concat(backlog),errors=0;
+  for(var i=0;i<all.length;i++){
+    try{await pushOne(all[i]);}catch(e){errors++;}
+  }
+  saveTasks();saveBL();
+  setSyncStatus(errors===0?'ok':'err',errors===0?'推送完成':'推送完成，'+errors+'项失败');
+  document.getElementById('push-btn').disabled=false;
+  renderAll();
+}
+
+async function syncFromNotion(){
+  setSyncStatus('ing','同步中…');
+  document.getElementById('pull-btn').disabled=true;
+  try{
+    var data=await notionReq('POST','/databases/'+NOTION_DB+'/query',{page_size:100});
+    var pages=data.results||[];
+    pages.forEach(function(page){
+      var t=parseNotionPage(page);
+      var idx=tasks.findIndex(function(x){return x.notionId===page.id;});
+      var bidx=backlog.findIndex(function(x){return x.notionId===page.id;});
+      if(idx>=0){tasks[idx]=Object.assign(tasks[idx],t);}
+      else if(bidx>=0){backlog[bidx]=Object.assign(backlog[bidx],t);}
+      else{
+        if(!t.startDate||t.startDate<=TODAY){tasks.push(t);}
+        else{backlog.push(t);}
+      }
+    });
+    saveTasks();saveBL();
+    setSyncStatus('ok','已同步 ('+new Date().toLocaleTimeString('zh-CN')+')');
+    renderAll();
+  }catch(e){
+    setSyncStatus('err','同步失败：'+e.message);
+  }
+  document.getElementById('pull-btn').disabled=false;
+}
+
+// ── Export / Import ───────────────────────────────────────────────────────────
+function exportData(){
+  var data={
+    version:1,
+    exportTime:new Date().toISOString(),
+    tasks:tasks,
+    backlog:backlog
+  };
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  a.download='工作计划备份_'+TODAY+'.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  setSyncStatus('ok','备份已导出');
+}
+
+function importData(event){
+  var file=event.target.files[0];
+  if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var data=JSON.parse(e.target.result);
+      if(!data.version||!data.tasks)throw new Error('格式错误');
+      if(confirm('导入将合并现有数据，确认吗？')){
+        // Merge by id
+        data.tasks.forEach(function(t){
+          if(!tasks.find(function(x){return x.id===t.id||x.notionId===t.notionId;})){
+            tasks.push(t);
+          }
+        });
+        data.backlog.forEach(function(t){
+          if(!backlog.find(function(x){return x.id===t.id||x.notionId===t.notionId;})){
+            backlog.push(t);
+          }
+        });
+        saveTasks();saveBL();
+        setSyncStatus('ok','导入成功，共 '+(data.tasks.length+data.backlog.length)+' 条');
+        renderAll();
+      }
+    }catch(err){
+      alert('导入失败：'+err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value='';
+}
+
 // ── Add ───────────────────────────────────────────────────────────────────────
 function addTask(){
   var text=document.getElementById('t-text').value.trim();
@@ -594,9 +630,7 @@ function addTask(){
     startDate:document.getElementById('t-start').value||TODAY,
     dueDate:document.getElementById('t-due').value||'',
     createdDate:TODAY,completedDate:'',done:false,notionId:''};
-  tasks.push(t);
-  saveTasks();
-  pushOne(t);
+  tasks.push(t);saveTasks();pushOne(t);
   document.getElementById('t-text').value='';
   document.getElementById('t-due').value='';
   document.getElementById('t-start').value=TODAY;
@@ -612,54 +646,40 @@ function addBL(){
     startDate:document.getElementById('bl-start').value||TODAY,
     dueDate:document.getElementById('bl-due').value||'',
     createdDate:TODAY,completedDate:'',done:false,notionId:''};
-  backlog.push(t);
-  saveBL();
-  pushOne(t);
+  backlog.push(t);saveBL();pushOne(t);
   document.getElementById('bl-text').value='';
   document.getElementById('bl-due').value='';
   document.getElementById('bl-start').value=TODAY;
   renderBL();
 }
 
-// ── Toggle / Del ──────────────────────────────────────────────────────────────
 function toggleTask(id){
   var t=tasks.find(function(x){return x.id===id;});
   if(!t)return;
-  t.done=!t.done;
-  t.completedDate=t.done?TODAY:'';
-  saveTasks();checkStreak();
-  pushOne(t);
-  renderToday();
+  t.done=!t.done;t.completedDate=t.done?TODAY:'';
+  saveTasks();checkStreak();pushOne(t);renderToday();
 }
 function delTask(id){tasks=tasks.filter(function(t){return t.id!==id;});saveTasks();renderToday();}
-
 function toggleBL(id){
   var t=backlog.find(function(x){return x.id===id;});
   if(!t)return;
-  t.done=!t.done;
-  t.completedDate=t.done?TODAY:'';
-  saveBL();
-  pushOne(t);
-  renderBL();
+  t.done=!t.done;t.completedDate=t.done?TODAY:'';
+  saveBL();pushOne(t);renderBL();
 }
 function delBL(id){backlog=backlog.filter(function(t){return t.id!==id;});saveBL();renderBL();}
-
 function promote(id){
-  var item=backlog.find(function(t){return t.id===id;});
-  if(!item)return;
+  var item=backlog.find(function(t){return t.id===id;});if(!item)return;
   var nt=Object.assign({},item,{id:Date.now(),startDate:item.startDate||TODAY});
   tasks.push(nt);saveTasks();
   backlog=backlog.filter(function(t){return t.id!==id;});saveBL();
-  pushOne(nt);
-  renderToday();renderBL();
+  pushOne(nt);renderToday();renderBL();
 }
-
 function checkStreak(){
   var td=tasks.filter(function(t){return t.createdDate===TODAY;});
   if(td.length>0&&td.every(function(t){return t.done;})&&streak.last!==TODAY){
     var y=addDays(TODAY,-1);
     streak.count=streak.last===y?streak.count+1:1;
-    streak.last=TODAY;ss('wp5_streak',streak);
+    streak.last=TODAY;ss('wp6_streak',streak);
   }
 }
 
@@ -681,7 +701,7 @@ function renderToday(){
 function renderBL(){
   var groups={week:[],month:[],quarter:[],later:[]};
   backlog.forEach(function(t){groups[blGroup(t)].push(t);});
-  var labels={week:'本周到期',month:'本月到期',quarter:'本季度到期',later:'更远 / 无截止'};
+  var labels={week:'本周到期',month:'本月到期',quarter:'本季度到期',later:'更远/无截止'};
   var colors={week:'#E24B4A',month:'#BA7517',quarter:'#185FA5',later:'#6b6b66'};
   var html='';
   ['week','month','quarter','later'].forEach(function(g){
@@ -689,7 +709,7 @@ function renderBL(){
     var sorted=items.slice().sort(function(a,b){return ({urgent:0,mid:1,low:2}[a.pri]||1)-({urgent:0,mid:1,low:2}[b.pri]||1);});
     html+='<div class="sec"><span style="color:'+colors[g]+'">'+labels[g]+'</span><span class="sec-count">'+items.length+'</span></div>';
     html+='<div class="tlist" style="margin-bottom:4px">'+sorted.map(function(t){
-      return taskHtml(t,'toggleBL','delBL','<button class="btn btn-sm" onclick="promote('+t.id+')">加入今日</button>');
+      return taskHtml(t,'toggleBL','delBL','<button class="btn btn-sm promote-btn" onclick="promote('+t.id+')">今日</button>');
     }).join('')+'</div>';
   });
   document.getElementById('bl-sections').innerHTML=html||'<div class="empty">待办池为空</div>';
@@ -708,7 +728,7 @@ function renderGantt(){
     return ts<=end&&te>=start;
   });
   var body=document.getElementById('gantt-body');
-  if(!all.length){body.innerHTML='<div class="gantt-empty">暂无有效时间段的任务<br><span style="font-size:12px">请为任务设置开始和截止日期</span></div>';return;}
+  if(!all.length){body.innerHTML='<div class="gantt-empty">暂无有效时间段的任务<br><small>请为任务设置开始和截止日期</small></div>';return;}
   var labelStep=Math.max(1,Math.floor(totalD/6));
   var dateLabels='';
   for(var i=0;i<totalD;i++){
@@ -731,11 +751,11 @@ function renderGantt(){
     var ci=CATS.indexOf(t.cat);
     var color=ci>=0?CAT_COLORS[ci]:'#888';
     rows+='<div class="gantt-row">'+
-      '<div class="gantt-name" title="'+esc(t.text)+'">'+(t.done?'&#10003; ':'')+esc(t.text)+'</div>'+
+      '<div class="gantt-name" title="'+esc(t.text)+'">'+(t.done?'✓ ':'')+esc(t.text)+'</div>'+
       '<div class="gantt-track">'+todayLine+'<div class="gantt-bar" style="left:'+left+'%;width:'+width+'%;background:'+color+';opacity:'+(t.done?0.4:1)+'">'+esc(t.text)+'</div></div>'+
     '</div>';
   });
-  body.innerHTML='<div style="min-width:500px"><div class="gantt-header"><div class="gantt-task-col">任务</div><div class="gantt-dates">'+dateLabels+'</div></div>'+rows+'</div>';
+  body.innerHTML='<div style="min-width:480px"><div class="gantt-header"><div class="gantt-task-col">任务</div><div class="gantt-dates">'+dateLabels+'</div></div>'+rows+'</div>';
 }
 
 function renderStats(){
@@ -756,13 +776,13 @@ function renderStats(){
   }
   var maxDay=Math.max.apply(null,[1].concat(dayData.map(function(d){return d.count;})));
   var grid=document.getElementById('stat-grid');
-  var c1='<div class="stat-card"><h3>完成率</h3><div class="rate-circle"><div class="rate-num">'+rate+'%</div><div class="rate-sub">完成 '+completed.length+' / 共 '+total+' 项</div>'+(overdue?'<div style="margin-top:8px;font-size:12px;color:#A32D2D">&#9888; '+overdue+' 项已逾期</div>':'')+'</div></div>';
-  var c2='<div class="stat-card"><h3>近7天每日完成</h3><div class="week-row">'+dayData.map(function(d){
+  var c1='<div class="stat-card"><h3>完成率</h3><div class="rate-circle"><div class="rate-num">'+rate+'%</div><div class="rate-sub">完成'+completed.length+'/共'+total+'项</div>'+(overdue?'<div style="margin-top:6px;font-size:12px;color:#A32D2D">⚠ '+overdue+'项逾期</div>':'')+'</div></div>';
+  var c2='<div class="stat-card"><h3>近7天完成</h3><div class="week-row">'+dayData.map(function(d){
     var pp=Math.round(d.count/maxDay*100),pts=d.date.split('-');
     return '<div class="week-day"><div class="wd-label">'+pts[1]+'/'+pts[2]+'</div><div class="wd-bar"><div class="wd-fill" style="height:'+pp+'%;background:'+(d.date===TODAY?'#E24B4A':'var(--accent)')+'"></div></div><div class="wd-num">'+d.count+'</div></div>';
   }).join('')+'</div></div>';
-  var c3='<div class="stat-card" style="grid-column:1/-1"><h3>按类别完成数（近'+days+'天）</h3>'+
-    (Object.keys(catCounts).length===0?'<div class="empty" style="padding:12px 0">暂无已完成任务</div>':
+  var c3='<div class="stat-card full"><h3>按类别（近'+days+'天）</h3>'+
+    (Object.keys(catCounts).length===0?'<div class="empty" style="padding:10px 0">暂无完成任务</div>':
     Object.entries(catCounts).sort(function(a,b){return b[1]-a[1];}).map(function(e){
       var ci=CATS.indexOf(e[0]),color=ci>=0?CAT_COLORS[ci]:'#888',pp=Math.round(e[1]/maxCat*100);
       return '<div class="bar-row"><div class="bar-label">'+e[0]+'</div><div class="bar-wrap"><div class="bar-fill" style="width:'+pp+'%;background:'+color+'"></div></div><div class="bar-val">'+e[1]+'</div></div>';
@@ -782,16 +802,15 @@ function renderHistory(){
   wrap.innerHTML=days.map(function(day){
     var done=day.tasks.filter(function(t){return t.completedDate===day.date;}).length;
     var going=day.tasks.filter(function(t){return !t.done;}).length;
-    return '<div class="hday"><div class="hhdr">&#128197; '+day.date+'<span class="hrate">完成 '+done+' &middot; 进行中 '+going+'</span></div>'+
+    return '<div class="hday"><div class="hhdr">📅 '+day.date+'<span class="hrate">完成'+done+'·进行中'+going+'</span></div>'+
       day.tasks.map(function(t){
         return '<div class="task'+(t.done?' done':'')+'">'+
-          '<span style="font-size:13px;flex-shrink:0;color:'+(t.done?'#1D9E75':'#9d9d97')+';margin-top:2px">'+(t.done?'&#10003;':'&#9675;')+'</span>'+
+          '<span style="font-size:13px;flex-shrink:0;color:'+(t.done?'#1D9E75':'#9d9d97')+';margin-top:2px">'+(t.done?'✓':'○')+'</span>'+
           '<div class="tbody"><div class="ttext">'+esc(t.text)+'</div><div class="tmeta">'+priTag(t.pri)+catTag(t.cat)+dateStr(t)+'</div></div></div>';
       }).join('')+'</div>';
   }).join('');
 }
 
-// ── Report ────────────────────────────────────────────────────────────────────
 async function genRpt(){
   var type=document.getElementById('rpt-type').value;
   var extra=document.getElementById('rpt-extra').value.trim();
@@ -809,7 +828,7 @@ async function genRpt(){
     if(!arr.length)return '  无';
     return arr.map(function(t){
       var pri=t.pri==='urgent'?'紧急':t.pri==='low'?'低优':'一般';
-      var line='- ['+(t.cat||'未分类')+'] '+t.text+'（优先级:'+pri;
+      var line='- ['+(t.cat||'未分类')+'] '+t.text+'（'+pri;
       if(t.startDate)line+='，开始:'+t.startDate;
       if(t.dueDate)line+='，截止:'+t.dueDate;
       if(t.completedDate)line+='，完成:'+t.completedDate;
@@ -833,7 +852,7 @@ async function genRpt(){
 function copyRpt(){
   var text=document.getElementById('rpt-out').textContent;
   var b=document.getElementById('copy-btn');
-  function ok(){b.textContent='&#10003; 已复制';setTimeout(function(){b.textContent='&#128203; 复制';},1800);}
+  function ok(){b.textContent='✓ 已复制';setTimeout(function(){b.textContent='📋 复制';},1800);}
   function fail(){
     var ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0';
     document.body.appendChild(ta);ta.focus();ta.select();
@@ -867,7 +886,7 @@ async function sendChat(){
   chatHistory.push({role:'user',content:msg});
   btn.innerHTML='<span class="spinner"></span>';btn.disabled=true;
   var firstMsg='以下是当前报告草稿：\n\n'+currentReport+'\n\n修改建议：'+chatHistory[0].content;
-  var messages=[{role:'user',content:'你是一个专业的职场写作助理。用户会给你一份工作报告草稿和修改建议。请直接输出修改后的完整报告，不要解释修改了什么。\n\n'+firstMsg}];
+  var messages=[{role:'user',content:'你是一个专业的职场写作助理。请直接输出修改后的完整报告，不要解释修改了什么。\n\n'+firstMsg}];
   for(var i=1;i<chatHistory.length;i++){messages.push(chatHistory[i]);}
   try{
     var resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,messages:messages})});
@@ -883,10 +902,9 @@ document.addEventListener('DOMContentLoaded',function(){
   var ta=document.getElementById('chat-input');
   if(ta){
     ta.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}});
-    ta.addEventListener('input',function(){ta.style.height='38px';ta.style.height=Math.min(ta.scrollHeight,120)+'px';});
+    ta.addEventListener('input',function(){ta.style.height='38px';ta.style.height=Math.min(ta.scrollHeight,100)+'px';});
   }
-  // Auto sync from Notion on load
-  setSyncStatus('ing','正在连接 Notion…');
+  setSyncStatus('ing','连接中…');
   syncFromNotion();
 });
 
