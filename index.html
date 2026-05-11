@@ -1,0 +1,315 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.app{padding:1rem 0}
+.tabs{display:flex;gap:4px;margin-bottom:1.5rem;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:0}
+.tab{padding:8px 16px;font-size:14px;cursor:pointer;border:none;background:transparent;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px}
+.tab.active{color:var(--color-text-primary);border-bottom:2px solid var(--color-text-primary);font-weight:500}
+.tab:hover{color:var(--color-text-primary)}
+.panel{display:none}.panel.active{display:block}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+.stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;text-align:center}
+.stat-num{font-size:22px;font-weight:500;color:var(--color-text-primary)}
+.stat-label{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.section-title{font-size:13px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+.add-row{display:flex;gap:8px;margin-bottom:1rem}
+.add-row input,.add-row select{flex:1;font-size:14px}
+.add-row select{flex:0 0 90px}
+.add-row button{flex:0 0 auto}
+.task-list{display:flex;flex-direction:column;gap:6px;margin-bottom:1.5rem}
+.task{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md)}
+.task.done .task-text{text-decoration:line-through;color:var(--color-text-tertiary)}
+.task-text{flex:1;font-size:14px}
+.task-tag{font-size:11px;padding:2px 8px;border-radius:20px}
+.tag-high{background:#FAECE7;color:#993C1D}
+.tag-mid{background:#FAEEDA;color:#854F0B}
+.tag-low{background:#EAF3DE;color:#3B6D11}
+.tag-daily{background:#E6F1FB;color:#185FA5}
+.tag-week{background:#EEEDFE;color:#534AB7}
+.tag-month{background:#FBEAF0;color:#993556}
+.del-btn{background:none;border:none;cursor:pointer;color:var(--color-text-tertiary);padding:2px 4px;font-size:16px;line-height:1}
+.del-btn:hover{color:var(--color-text-primary)}
+.promote-btn{background:none;border:0.5px solid var(--color-border-tertiary);cursor:pointer;color:var(--color-text-secondary);padding:2px 8px;font-size:12px;border-radius:20px}
+.promote-btn:hover{background:var(--color-background-secondary)}
+.empty{color:var(--color-text-tertiary);font-size:13px;padding:16px 0;text-align:center}
+.report-area{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem;font-size:13px;line-height:1.8;min-height:200px;color:var(--color-text-primary);white-space:pre-wrap;word-break:break-all}
+.report-area.placeholder{color:var(--color-text-tertiary)}
+.report-controls{display:flex;gap:8px;margin-bottom:1rem;align-items:center;flex-wrap:wrap}
+.report-controls select,.report-controls input{font-size:13px}
+.progress-bar{height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden;margin-top:6px}
+.progress-fill{height:100%;background:#1D9E75;border-radius:3px;transition:width .3s}
+.date-label{font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem}
+.loading-dot{display:inline-block;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+</style>
+
+<div class="app">
+<h2 class="sr-only">个人工作计划管理工具</h2>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('today')"><i class="ti ti-calendar" aria-hidden="true"></i> 今日计划</button>
+  <button class="tab" onclick="switchTab('backlog')"><i class="ti ti-list" aria-hidden="true"></i> 待办池</button>
+  <button class="tab" onclick="switchTab('history')"><i class="ti ti-clock" aria-hidden="true"></i> 历史记录</button>
+  <button class="tab" onclick="switchTab('report')"><i class="ti ti-file-text" aria-hidden="true"></i> 生成报告</button>
+</div>
+
+<div id="tab-today" class="panel active">
+  <div class="date-label" id="today-date"></div>
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="s-total">0</div><div class="stat-label">今日任务</div></div>
+    <div class="stat"><div class="stat-num" id="s-done">0</div><div class="stat-label">已完成</div></div>
+    <div class="stat"><div class="stat-num" id="s-rate">0%</div><div class="stat-label">完成率</div></div>
+    <div class="stat"><div class="stat-num" id="s-streak">0</div><div class="stat-label">连续完工天</div></div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <div style="margin-bottom:1.2rem"></div>
+  <div class="add-row">
+    <input type="text" id="new-task" placeholder="添加今日任务…" onkeydown="if(event.key==='Enter')addTask()">
+    <select id="new-pri">
+      <option value="high">紧急</option>
+      <option value="mid" selected>一般</option>
+      <option value="low">低优</option>
+    </select>
+    <button onclick="addTask()"><i class="ti ti-plus" aria-hidden="true"></i> 添加</button>
+  </div>
+  <div class="section-title">今日任务</div>
+  <div class="task-list" id="today-list"></div>
+</div>
+
+<div id="tab-backlog" class="panel">
+  <div class="add-row">
+    <input type="text" id="bl-task" placeholder="添加待办项…" onkeydown="if(event.key==='Enter')addBacklog()">
+    <select id="bl-type">
+      <option value="week">本周</option>
+      <option value="month">本月</option>
+    </select>
+    <button onclick="addBacklog()"><i class="ti ti-plus" aria-hidden="true"></i> 添加</button>
+  </div>
+  <div class="section-title">本周待办</div>
+  <div class="task-list" id="week-list"></div>
+  <div class="section-title">本月待办</div>
+  <div class="task-list" id="month-list"></div>
+</div>
+
+<div id="tab-history" class="panel">
+  <div class="section-title">近期完成记录</div>
+  <div class="task-list" id="history-list"></div>
+</div>
+
+<div id="tab-report" class="panel">
+  <div class="report-controls">
+    <select id="report-type">
+      <option value="week">周报</option>
+      <option value="quarter">季度总结</option>
+      <option value="year">年度总结</option>
+    </select>
+    <input type="text" id="report-extra" placeholder="补充说明（可选）" style="flex:1;min-width:120px">
+    <button onclick="genReport()"><i class="ti ti-sparkles" aria-hidden="true"></i> AI 生成 ↗</button>
+    <button onclick="copyReport()" id="copy-btn" style="flex:0 0 auto"><i class="ti ti-copy" aria-hidden="true"></i> 复制</button>
+  </div>
+  <div class="report-area placeholder" id="report-output">点击"AI 生成"，自动汇总你的工作记录并生成报告草稿…</div>
+</div>
+</div>
+
+<script>
+const TODAY = new Date().toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
+document.getElementById('today-date').textContent = TODAY;
+
+const todayKey = new Date().toISOString().slice(0,10);
+
+function load(k,def){try{return JSON.parse(localStorage.getItem(k))||def}catch{return def}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+
+let tasks = load('planner_tasks_'+todayKey,[]);
+let backlog = load('planner_backlog',{week:[],month:[]});
+let history = load('planner_history',[]);
+let streak = load('planner_streak',{last:'',count:0});
+
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(el=>el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('tab-'+t).classList.add('active');
+  renderAll();
+}
+
+function addTask(){
+  const v=document.getElementById('new-task').value.trim();
+  if(!v)return;
+  tasks.push({id:Date.now(),text:v,pri:document.getElementById('new-pri').value,done:false,date:todayKey});
+  save('planner_tasks_'+todayKey,tasks);
+  document.getElementById('new-task').value='';
+  renderToday();
+}
+
+function addBacklog(){
+  const v=document.getElementById('bl-task').value.trim();
+  if(!v)return;
+  const t=document.getElementById('bl-type').value;
+  backlog[t].push({id:Date.now(),text:v,done:false});
+  save('planner_backlog',backlog);
+  document.getElementById('bl-task').value='';
+  renderBacklog();
+}
+
+function toggleTask(id){
+  tasks=tasks.map(t=>t.id===id?{...t,done:!t.done}:t);
+  save('planner_tasks_'+todayKey,tasks);
+  checkStreak();
+  renderToday();
+}
+
+function delTask(id){
+  tasks=tasks.filter(t=>t.id!==id);
+  save('planner_tasks_'+todayKey,tasks);
+  renderToday();
+}
+
+function toggleBL(type,id){
+  backlog[type]=backlog[type].map(t=>t.id===id?{...t,done:!t.done}:t);
+  save('planner_backlog',backlog);
+  renderBacklog();
+}
+
+function delBL(type,id){
+  backlog[type]=backlog[type].filter(t=>t.id!==id);
+  save('planner_backlog',backlog);
+  renderBacklog();
+}
+
+function promoteToToday(type,id){
+  const item=backlog[type].find(t=>t.id===id);
+  if(!item)return;
+  tasks.push({id:Date.now(),text:item.text,pri:'mid',done:false,date:todayKey});
+  save('planner_tasks_'+todayKey,tasks);
+  backlog[type]=backlog[type].filter(t=>t.id!==id);
+  save('planner_backlog',backlog);
+  renderToday();
+  renderBacklog();
+}
+
+function checkStreak(){
+  const allDone=tasks.length>0&&tasks.every(t=>t.done);
+  if(allDone&&streak.last!==todayKey){
+    const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+    const yKey=yesterday.toISOString().slice(0,10);
+    streak.count=streak.last===yKey?streak.count+1:1;
+    streak.last=todayKey;
+    save('planner_streak',streak);
+    history.unshift({date:todayKey,tasks:[...tasks]});
+    if(history.length>30)history.pop();
+    save('planner_history',history);
+  }
+}
+
+function priTag(p){
+  if(p==='high')return '<span class="task-tag tag-high">紧急</span>';
+  if(p==='low')return '<span class="task-tag tag-low">低优</span>';
+  return '<span class="task-tag tag-mid">一般</span>';
+}
+
+function renderToday(){
+  const total=tasks.length,done=tasks.filter(t=>t.done).length;
+  document.getElementById('s-total').textContent=total;
+  document.getElementById('s-done').textContent=done;
+  document.getElementById('s-rate').textContent=total?Math.round(done/total*100)+'%':'0%';
+  document.getElementById('s-streak').textContent=streak.count;
+  document.getElementById('progress-fill').style.width=total?Math.round(done/total*100)+'%':'0%';
+  const ul=document.getElementById('today-list');
+  if(!tasks.length){ul.innerHTML='<div class="empty">还没有今日任务，添加一个吧</div>';return;}
+  ul.innerHTML=tasks.map(t=>`
+    <div class="task${t.done?' done':''}">
+      <input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})" aria-label="标记完成">
+      <span class="task-text">${t.text}</span>
+      ${priTag(t.pri)}
+      <button class="del-btn" onclick="delTask(${t.id})" aria-label="删除">×</button>
+    </div>`).join('');
+}
+
+function renderBacklog(){
+  ['week','month'].forEach(type=>{
+    const ul=document.getElementById(type+'-list');
+    const items=backlog[type];
+    if(!items.length){ul.innerHTML=`<div class="empty">暂无${type==='week'?'本周':'本月'}待办</div>`;return;}
+    ul.innerHTML=items.map(t=>`
+      <div class="task${t.done?' done':''}">
+        <input type="checkbox" ${t.done?'checked':''} onchange="toggleBL('${type}',${t.id})" aria-label="标记完成">
+        <span class="task-text">${t.text}</span>
+        <span class="task-tag ${type==='week'?'tag-week':'tag-month'}">${type==='week'?'本周':'本月'}</span>
+        <button class="promote-btn" onclick="promoteToToday('${type}',${t.id})">加入今日</button>
+        <button class="del-btn" onclick="delBL('${type}',${t.id})" aria-label="删除">×</button>
+      </div>`).join('');
+  });
+}
+
+function renderHistory(){
+  const ul=document.getElementById('history-list');
+  const allDays=[];
+  for(let i=0;i<7;i++){
+    const d=new Date();d.setDate(d.getDate()-i);
+    const k=d.toISOString().slice(0,10);
+    const dayTasks=load('planner_tasks_'+k,[]);
+    if(dayTasks.length)allDays.push({date:k,tasks:dayTasks});
+  }
+  if(!allDays.length){ul.innerHTML='<div class="empty">暂无历史记录</div>';return;}
+  ul.innerHTML=allDays.map(day=>{
+    const done=day.tasks.filter(t=>t.done).length;
+    return `<div class="task">
+      <span class="task-text" style="font-weight:500">${day.date}</span>
+      <span class="task-tag tag-daily">${done}/${day.tasks.length} 完成</span>
+    </div>`+day.tasks.map(t=>`
+      <div class="task${t.done?' done':''}">
+        <span style="width:20px;text-align:center;color:${t.done?'#1D9E75':'var(--color-text-tertiary)'}">${t.done?'✓':'○'}</span>
+        <span class="task-text">${t.text}</span>
+        ${priTag(t.pri)}
+      </div>`).join('');
+  }).join('');
+}
+
+async function genReport(){
+  const type=document.getElementById('report-type').value;
+  const extra=document.getElementById('report-extra').value.trim();
+  const out=document.getElementById('report-output');
+  out.classList.remove('placeholder');
+  out.textContent='正在生成中';
+  let dot = setInterval(()=>{out.textContent='正在生成中'+''.padEnd((Date.now()/400|0)%4,'.')}, 400);
+
+  const allDays=[];
+  for(let i=0;i<(type==='week'?7:type==='quarter'?90:365);i++){
+    const d=new Date();d.setDate(d.getDate()-i);
+    const k=d.toISOString().slice(0,10);
+    const dayTasks=load('planner_tasks_'+k,[]);
+    if(dayTasks.length)allDays.push({date:k,tasks:dayTasks});
+  }
+  const blSummary=`本周待办: ${backlog.week.map(t=>t.text).join('、')||'无'}；本月待办: ${backlog.month.map(t=>t.text).join('、')||'无'}`;
+  const taskSummary=allDays.map(d=>`${d.date}: ${d.tasks.map(t=>`${t.done?'[✓]':'[○]'}${t.text}`).join(' | ')}`).join('\n')||'（暂无记录）';
+  const typeLabel={'week':'周报','quarter':'季度工作总结','year':'年度工作总结'}[type];
+
+  let prompt=`你是一个专业的职场助理。请根据以下工作记录生成一份【${typeLabel}】，使用中文，格式清晰，语言正式，分为：本期工作完成情况、亮点与成果、未完成事项与原因、下期工作计划四个部分。\n\n工作记录：\n${taskSummary}\n\n待办清单：${blSummary}`;
+  if(extra)prompt+=`\n\n补充说明：${extra}`;
+
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const data=await resp.json();
+    clearInterval(dot);
+    const text=data.content?.map(c=>c.text||'').join('')||'生成失败，请重试。';
+    out.textContent=text;
+  }catch(e){
+    clearInterval(dot);
+    out.textContent='网络错误，请稍后重试。';
+  }
+}
+
+function copyReport(){
+  const text=document.getElementById('report-output').textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.getElementById('copy-btn');
+    btn.textContent='已复制';
+    setTimeout(()=>{btn.innerHTML='<i class="ti ti-copy" aria-hidden="true"></i> 复制'},1500);
+  });
+}
+
+function renderAll(){renderToday();renderBacklog();renderHistory();}
+renderAll();
+</script>
