@@ -595,6 +595,7 @@ async function syncFromNotion(){
       }
     });
     saveTasks();saveBL();
+    localStorage.setItem('wp6_lastSync',Date.now().toString());
     setSyncStatus('ok','已同步 ('+new Date().toLocaleTimeString('zh-CN')+')');
     renderAll();
   }catch(e){
@@ -706,6 +707,13 @@ function promote(id){
   backlog=backlog.filter(function(t){return t.id!==id;});saveBL();
   pushOne(nt);renderToday();renderBL();
 }
+function demote(id){
+  var item=tasks.find(function(t){return t.id===id;});if(!item)return;
+  var nt=Object.assign({},item,{id:Date.now()});
+  backlog.push(nt);saveBL();
+  tasks=tasks.filter(function(t){return t.id!==id;});saveTasks();
+  pushOne(nt);renderToday();renderBL();
+}
 function checkStreak(){
   var td=tasks.filter(function(t){return t.createdDate===TODAY;});
   if(td.length>0&&td.every(function(t){return t.done;})&&streak.last!==TODAY){
@@ -726,7 +734,7 @@ function renderToday(){
   document.getElementById('prog').style.width=total?Math.round(done/total*100)+'%':'0%';
   var ul=document.getElementById('today-list');
   if(!shown.length){ul.innerHTML='<div class="empty">今日暂无任务</div>';return;}
-  ul.innerHTML=shown.map(function(t){return taskHtml(t,'toggleTask','delTask','');}).join('');
+  ul.innerHTML=shown.map(function(t){return taskHtml(t,'toggleTask','delTask',t.done?'':'<button class="btn btn-sm promote-btn" onclick="demote('+t.id+')">转待办</button>');}).join('');
 }
 
 function renderBL(){
@@ -1000,6 +1008,24 @@ document.addEventListener('DOMContentLoaded',function(){
   setSyncStatus('ing','连接中…');
   syncFromNotion();
 });
+
+// 自动同步：页面切回前台时
+document.addEventListener('visibilitychange',function(){
+  if(!document.hidden){
+    // 只在距离上次同步超过 1 分钟才触发，避免频繁刷新
+    var last=parseInt(localStorage.getItem('wp6_lastSync')||'0');
+    if(Date.now()-last>60000){
+      syncFromNotion();
+    }
+  }
+});
+
+// 自动同步：每 5 分钟一次
+setInterval(function(){
+  if(!document.hidden){
+    syncFromNotion();
+  }
+},5*60*1000);
 
 function renderAll(){renderToday();renderBL();renderGantt();renderStats();renderHistory();}
 renderAll();
